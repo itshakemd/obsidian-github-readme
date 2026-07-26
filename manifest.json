@@ -1,0 +1,9 @@
+{
+  "id": "github-readme",
+  "name": "GitHub README",
+  "version": "0.1.0",
+  "minAppVersion": "1.5.0",
+  "description": "View and edit GitHub README files from Obsidian.",
+  "author": "Hakem",
+  "isDesktopOnly": false
+}
