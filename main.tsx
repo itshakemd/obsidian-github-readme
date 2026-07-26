@@ -18,6 +18,17 @@ class GitHubView extends ItemView {
 export default class GitHubReadmePlugin extends Plugin {
   async onload(): Promise<void> {
     this.registerView(VIEW_TYPE, (leaf: WorkspaceLeaf) => new GitHubView(leaf));
+    const ribbonIconEl = this.addRibbonIcon("github", "Open GitHub README", () => {
+      void this.activateView();
+    });
+    ribbonIconEl.addClass("github-readme-ribbon-icon");
+  }
+  private async activateView(): Promise<void> {
+    const existing = this.app.workspace.getLeavesOfType(VIEW_TYPE);
+    if (existing.length > 0) { await this.app.workspace.revealLeaf(existing[0]); return; }
+    const leaf = this.app.workspace.getLeaf("tab");
+    await leaf.setViewState({ type: VIEW_TYPE, active: true });
+    await this.app.workspace.revealLeaf(leaf);
   }
   onunload(): void {
     this.app.workspace.detachLeavesOfType(VIEW_TYPE);
