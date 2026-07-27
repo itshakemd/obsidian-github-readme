@@ -1,4 +1,5 @@
-import { ItemView, Plugin, WorkspaceLeaf } from "obsidian";
+import { ItemView, Plugin, PluginSettingTab, Setting, WorkspaceLeaf } from "obsidian";
+import { DEFAULT_SETTINGS, type GitHubReadmeSettings } from "./src/settings";
 import { createRoot } from "react-dom/client";
 import type { Root } from "react-dom/client";
 import App from "./src/App";
@@ -15,13 +16,26 @@ class GitHubView extends ItemView {
   async onClose(): Promise<void> { this.root?.unmount(); this.root = null; }
 }
 
+class GitHubReadmeSettingTab extends PluginSettingTab {
+  private pluginInstance: GitHubReadmePlugin;
+  constructor(pluginInstance: GitHubReadmePlugin) { super(pluginInstance.app, pluginInstance); this.pluginInstance = pluginInstance; }
+  display(): void {
+    const { containerEl } = this;
+    containerEl.empty();
+    containerEl.createEl("h2", { text: "GitHub README" });
+  }
+}
+
 export default class GitHubReadmePlugin extends Plugin {
+  settings: GitHubReadmeSettings = { ...DEFAULT_SETTINGS };
   async onload(): Promise<void> {
+    await this.loadSettings();
     this.registerView(VIEW_TYPE, (leaf: WorkspaceLeaf) => new GitHubView(leaf));
     const ribbonIconEl = this.addRibbonIcon("github", "Open GitHub README", () => {
       void this.activateView();
     });
     ribbonIconEl.addClass("github-readme-ribbon-icon");
+    this.addSettingTab(new GitHubReadmeSettingTab(this));
     this.addCommand({
       id: "open-github-readme-view",
       name: "Open GitHub README",
@@ -35,6 +49,9 @@ export default class GitHubReadmePlugin extends Plugin {
     await leaf.setViewState({ type: VIEW_TYPE, active: true });
     await this.app.workspace.revealLeaf(leaf);
   }
+  async loadSettings(): Promise<void> { const data = (await this.loadData()) as Partial<GitHubReadmeSettings> | null; this.settings = { ...DEFAULT_SETTINGS, ...(data ?? {}) }; }
+  async saveSettings(): Promise<void> { await this.saveData(this.settings); }
+  refreshViews(): void {}
   onunload(): void {
     this.app.workspace.detachLeavesOfType(VIEW_TYPE);
   }
