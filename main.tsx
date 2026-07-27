@@ -22,6 +22,11 @@ export default class GitHubReadmePlugin extends Plugin {
       void this.activateView();
     });
     ribbonIconEl.addClass("github-readme-ribbon-icon");
+    this.addCommand({
+      id: "open-github-readme-view",
+      name: "Open GitHub README",
+      callback: () => { void this.activateView(); },
+    });
   }
   private async activateView(): Promise<void> {
     const existing = this.app.workspace.getLeavesOfType(VIEW_TYPE);
