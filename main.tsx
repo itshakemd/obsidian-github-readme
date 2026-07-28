@@ -23,6 +23,24 @@ class GitHubReadmeSettingTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
     containerEl.createEl("h2", { text: "GitHub README" });
+    let tokenInput: HTMLInputElement | null = null;
+    new Setting(containerEl).setName("GitHub Personal Access Token").setDesc("Used to read/write README files via GitHub API. Stored locally in data.json.").addText((text) => {
+      text.setPlaceholder("ghp_… or github_pat_…").setValue(this.pluginInstance.settings.githubToken).onChange(async (value) => {
+        const trimmed = value.trim();
+        this.pluginInstance.settings.githubToken = trimmed;
+        await this.pluginInstance.saveSettings();
+      });
+      text.inputEl.type = "password";
+      text.inputEl.style.width = "260px";
+      tokenInput = text.inputEl;
+    }).addExtraButton((btn) => {
+      btn.setIcon("eye").setTooltip("Show token").onClick(() => {
+        if (!tokenInput) return;
+        const hidden = tokenInput.type === "password";
+        tokenInput.type = hidden ? "text" : "password";
+        btn.setIcon(hidden ? "eye-off" : "eye");
+      });
+    });
   }
 }
 
