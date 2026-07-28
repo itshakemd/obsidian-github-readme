@@ -29,6 +29,7 @@ class GitHubReadmeSettingTab extends PluginSettingTab {
         const trimmed = value.trim();
         this.pluginInstance.settings.githubToken = trimmed;
         await this.pluginInstance.saveSettings();
+        this.pluginInstance.refreshViews();
       });
       text.inputEl.type = "password";
       text.inputEl.style.width = "260px";
@@ -69,7 +70,8 @@ export default class GitHubReadmePlugin extends Plugin {
   }
   async loadSettings(): Promise<void> { const data = (await this.loadData()) as Partial<GitHubReadmeSettings> | null; this.settings = { ...DEFAULT_SETTINGS, ...(data ?? {}) }; }
   async saveSettings(): Promise<void> { await this.saveData(this.settings); }
-  refreshViews(): void {}
+  async saveToken(token: string): Promise<void> { this.settings.githubToken = token.trim(); await this.saveSettings(); this.refreshViews(); }
+  refreshViews(): void { for (const leaf of this.app.workspace.getLeavesOfType(VIEW_TYPE)) { const view = leaf.view as any; view.renderApp?.(); } }
   onunload(): void {
     this.app.workspace.detachLeavesOfType(VIEW_TYPE);
   }
