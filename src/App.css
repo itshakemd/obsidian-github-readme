@@ -1,3 +1,7 @@
 /* base */
 
 .github-readme-card { border: 1px solid var(--background-modifier-border); padding: 16px; }
+
+.github-readme-layout { display: flex; height: 100%; }
+.github-readme-sidebar { width: 300px; border-right: 1px solid var(--background-modifier-border); }
+.github-readme-main { flex: 1; }
