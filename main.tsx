@@ -42,6 +42,14 @@ class GitHubReadmeSettingTab extends PluginSettingTab {
         btn.setIcon(hidden ? "eye-off" : "eye");
       });
     });
+    new Setting(containerEl).setName("Clear token").setDesc("Remove the stored token.").addButton((btn) => {
+      btn.setButtonText("Clear").setWarning().onClick(async () => {
+        this.pluginInstance.settings.githubToken = "";
+        await this.pluginInstance.saveSettings();
+        this.pluginInstance.refreshViews();
+        this.display();
+      });
+    });
   }
 }
 
