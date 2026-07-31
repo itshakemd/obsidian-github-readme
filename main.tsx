@@ -78,13 +78,21 @@ export default class GitHubReadmePlugin extends Plugin {
   }
   async loadSettings(): Promise<void> { const data = (await this.loadData()) as Partial<GitHubReadmeSettings> | null; this.settings = { ...DEFAULT_SETTINGS, ...(data ?? {}) }; }
   async saveSettings(): Promise<void> { await this.saveData(this.settings); }
-  async listRepos(): Promise<any[]> {
+  async listRepos(): Promise<RepoInfo[]> {
     const token = this.settings.githubToken.trim();
     if (!token) throw new Error("No GitHub token — connect your token first");
-    const res = await fetch(`https://api.github.com/user/repos?per_page=100&page=1&sort=updated&affiliation=owner,collaborator,organization_member`, { headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github.v3+json" } });
-    // fetch user repos - will be paginated next
-    if (!res.ok) { const body = await res.text(); let msg = `${res.status} ${res.statusText}`; try { const j = JSON.parse(body) as { message?: string }; if (j.message) msg = j.message; } catch {} throw new Error(msg); }
-    return (await res.json()) as any[];
+    const repos: RepoInfo[] = [];
+    let page = 1;
+    while (true) {
+      const res = await fetch(`https://api.github.com/user/repos?per_page=100&page=${page}&sort=updated&affiliation=owner,collaborator,organization_member`, { headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github.v3+json" } });
+      if (!res.ok) { const body = await res.text(); let msg = `${res.status} ${res.statusText}`; try { const j = JSON.parse(body) as { message?: string }; if (j.message) msg = j.message; } catch {} throw new Error(msg); }
+      const batch = (await res.json()) as RepoInfo[];
+      repos.push(...batch);
+      if (batch.length < 100) break;
+      page += 1;
+      if (page > 10) break;
+    }
+    return repos;
   }
   async saveToken(token: string): Promise<void> { this.settings.githubToken = token.trim(); await this.saveSettings(); this.refreshViews(); }
   refreshViews(): void { for (const leaf of this.app.workspace.getLeavesOfType(VIEW_TYPE)) { const view = leaf.view as any; view.renderApp?.(); } }
