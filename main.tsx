@@ -82,7 +82,7 @@ export default class GitHubReadmePlugin extends Plugin {
     const token = this.settings.githubToken.trim();
     if (!token) throw new Error("No GitHub token — connect your token first");
     const res = await fetch(`https://api.github.com/user/repos?per_page=100&page=1&sort=updated&affiliation=owner,collaborator,organization_member`, { headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github.v3+json" } });
-    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+    if (!res.ok) { const body = await res.text(); let msg = `${res.status} ${res.statusText}`; try { const j = JSON.parse(body) as { message?: string }; if (j.message) msg = j.message; } catch {} throw new Error(msg); }
     return (await res.json()) as any[];
   }
   async saveToken(token: string): Promise<void> { this.settings.githubToken = token.trim(); await this.saveSettings(); this.refreshViews(); }
