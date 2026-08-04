@@ -10,3 +10,5 @@
 
 .github-repos-item { display: flex; padding: 8px 10px; }
 .github-repos-name { font-weight: 600; }
+
+.github-repos-private { font-size: 10px; padding: 0 6px; border: 1px solid var(--background-modifier-border); }
