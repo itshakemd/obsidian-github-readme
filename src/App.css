@@ -7,3 +7,6 @@
 .github-readme-main { flex: 1; }
 
 .github-repos-sidebar-header { display: flex; justify-content: space-between; padding: 0 2px; }
+
+.github-repos-item { display: flex; padding: 8px 10px; }
+.github-repos-name { font-weight: 600; }
