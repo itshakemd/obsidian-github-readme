@@ -1,13 +1,13 @@
 import { useReposSidebar } from "../hooks/useReposSidebar";
 import type { RepoInfo, UserProfile } from "../types";
 interface Props { getToken: () => string; listRepos: () => Promise<RepoInfo[]>; fetchProfile: () => Promise<UserProfile>; onSelectRepo: (repo: RepoInfo) => void; selectedFullName?: string | null; }
-export default function ReposSidebar({ getToken, listRepos, fetchProfile, onSelectRepo }: Props) {
+export default function ReposSidebar({ getToken, listRepos, fetchProfile, onSelectRepo, selectedFullName }: Props) {
   const { repos, loading, error } = useReposSidebar(getToken, listRepos, fetchProfile);
   return <div className="github-repos-sidebar"><div className="github-repos-sidebar-header"><h4>GitHub Repos</h4></div>
     {loading && <div>Loading...</div>}
     {error && <div className="github-readme-error">{error}</div>}
     <div className="github-repos-list">{repos.map((repo) => (
-      <button key={repo.id} className="github-repos-item" onClick={() => onSelectRepo(repo)} title={repo.full_name}>
+      <button key={repo.id} className={`github-repos-item ${selectedFullName === repo.full_name ? "active" : ""}`} onClick={() => onSelectRepo(repo)} title={repo.full_name}>
         <div className="github-repos-item-top"><span className="github-repos-name">{repo.name}</span>{repo.private && <span className="github-repos-private">private</span>}</div>
         {repo.description && <div className="github-repos-desc">{repo.description}</div>}
         {(repo.language) && <div className="github-repos-meta"><span>{repo.language}</span></div>}

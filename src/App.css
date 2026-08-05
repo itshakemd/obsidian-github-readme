@@ -15,3 +15,6 @@
 
 .github-repos-desc { font-size: 12px; color: var(--text-muted); }
 .github-repos-meta { font-size: 11px; color: var(--text-muted); }
+
+.github-repos-item.active { background: var(--background-modifier-hover); }
+.github-repos-item.active::before { content: ""; position: absolute; left: 2px; top: 8px; bottom: 8px; width: 3px; background: var(--interactive-accent); }
