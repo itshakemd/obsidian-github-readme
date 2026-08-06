@@ -101,7 +101,12 @@ export default class GitHubReadmePlugin extends Plugin {
     const res = await fetch(`https://api.github.com/repos/${fullName}/readme`, { headers });
     if (!res.ok) { const body = await res.text(); let msg = `${res.status} ${res.statusText}`; try { const j = JSON.parse(body) as { message?: string }; if (j.message) msg = j.message; } catch {} if (res.status === 404) throw new Error("No README found for this repository"); throw new Error(msg); }
     const data = (await res.json()) as { content: string; encoding: string; sha: string; path: string; name: string };
-    return { content: data.content, sha: data.sha, path: data.path ?? "README.md" };
+    if (data.encoding !== "base64" || !data.content) throw new Error("Unexpected README encoding");
+    const b64 = data.content.replace(/\n/g, "");
+    const binary = atob(b64);
+    const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+    const text = new TextDecoder().decode(bytes);
+    return { content: text, sha: data.sha, path: data.path ?? "README.md" };
   }
   async saveToken(token: string): Promise<void> { this.settings.githubToken = token.trim(); await this.saveSettings(); this.refreshViews(); }
   refreshViews(): void { for (const leaf of this.app.workspace.getLeavesOfType(VIEW_TYPE)) { const view = leaf.view as any; view.renderApp?.(); } }
