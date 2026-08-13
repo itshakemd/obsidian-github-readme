@@ -18,3 +18,7 @@
 
 .github-repos-item.active { background: var(--background-modifier-hover); }
 .github-repos-item.active::before { content: ""; position: absolute; left: 2px; top: 8px; bottom: 8px; width: 3px; background: var(--interactive-accent); }
+
+.github-spinner { width: 18px; height: 18px; border: 2px solid var(--background-modifier-border); border-top-color: var(--interactive-accent); border-radius: 50%; animation: github-spin 0.7s linear infinite; }
+@keyframes github-spin { to { transform: rotate(360deg); } }
+.github-readme-loading { display: flex; align-items: center; justify-content: center; padding: 24px; }
