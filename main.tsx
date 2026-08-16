@@ -1,4 +1,4 @@
-import { ItemView, Plugin, PluginSettingTab, Setting, WorkspaceLeaf } from "obsidian";
+import { Component, ItemView, MarkdownRenderer, Plugin, PluginSettingTab, Setting, WorkspaceLeaf } from "obsidian";
 import { DEFAULT_SETTINGS, type GitHubReadmeSettings } from "./src/settings";
 import { createRoot } from "react-dom/client";
 import type { Root } from "react-dom/client";
