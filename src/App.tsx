@@ -7,6 +7,7 @@ export default function App(props: any) {
   const [selectedRepo, setSelectedRepo] = useState<RepoInfo | null>(null);
   const [readme, setReadme] = useState<ReadmeData | null>(null);
   const [readmeLoading, setReadmeLoading] = useState(false);
+  const [readmeError, setReadmeError] = useState("");
   const handleSelectRepo = async (repo: RepoInfo) => {
     setSelectedRepo(repo);
     const data = await props.fetchReadme(repo.full_name);
@@ -16,7 +17,7 @@ export default function App(props: any) {
     <div className="github-readme-layout">
       <aside className="github-readme-sidebar"><ReposSidebar {...props} onSelectRepo={handleSelectRepo} selectedFullName={selectedRepo?.full_name ?? null} /></aside>
       <div className="github-readme-main">
-        <ReadmeWorkspace selectedRepo={selectedRepo} readme={readme} readmeLoading={readmeLoading} />
+        <ReadmeWorkspace selectedRepo={selectedRepo} readme={readme} readmeLoading={readmeLoading} readmeError={readmeError} />
         {!selectedRepo && <ConnectCard openSettings={props.openSettings} />}
       </div>
     </div>
