@@ -23,6 +23,7 @@ class GitHubReadmeSettingTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
     containerEl.createEl("h2", { text: "GitHub README" });
+    // default view mode setting added
     let tokenInput: HTMLInputElement | null = null;
     new Setting(containerEl).setName("GitHub Personal Access Token").setDesc("Used to read/write README files via GitHub API. Stored locally in data.json.").addText((text) => {
       text.setPlaceholder("ghp_… or github_pat_…").setValue(this.pluginInstance.settings.githubToken).onChange(async (value) => {
@@ -41,6 +42,9 @@ class GitHubReadmeSettingTab extends PluginSettingTab {
         tokenInput.type = hidden ? "text" : "password";
         btn.setIcon(hidden ? "eye-off" : "eye");
       });
+    });
+    new Setting(containerEl).setName("Default view mode").setDesc("How READMEs open: editor only, rendered viewer only, or editor and viewer side by side.").addDropdown((dropdown) => {
+      dropdown.addOption("editor", "Editor").addOption("viewer", "Viewer").addOption("split", "Split").setValue(this.pluginInstance.settings.defaultViewMode).onChange(async (value) => { this.pluginInstance.settings.defaultViewMode = value as any; await this.pluginInstance.saveSettings(); });
     });
     new Setting(containerEl).setName("Clear token").setDesc("Remove the stored token.").addButton((btn) => {
       btn.setButtonText("Clear").setWarning().onClick(async () => {
