@@ -10,6 +10,7 @@ export default function App(props: any) {
   const [readmeLoading, setReadmeLoading] = useState(false);
   const [readmeError, setReadmeError] = useState("");
   const [editorKey, setEditorKey] = useState(0);
+  const [viewMode, setViewMode] = useState("editor");
   const viewerRef = useRef<HTMLDivElement>(null);
   const editorScrollerRef = useRef<HTMLElement | null>(null);
   const syncScroll = useCallback((from: "editor" | "viewer", ratio: number) => {
@@ -17,5 +18,5 @@ export default function App(props: any) {
   }, []);
   const handleViewerScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => { const el = e.currentTarget; const max = el.scrollHeight - el.clientHeight; if (max>0) syncScroll("viewer", el.scrollTop / max); }, [syncScroll]);
   const handleSelectRepo = async (repo: RepoInfo) => { setSelectedRepo(repo); setReadme(null); setReadmeDraft(""); setReadmeError(""); setReadmeLoading(true); try { const data = await props.fetchReadme(repo.full_name); setReadme(data); setReadmeDraft(data.content); setEditorKey(k=>k+1);} catch(e){ setReadmeError(e instanceof Error? e.message: String(e));} finally { setReadmeLoading(false);} };
-  return (<div className="github-readme-layout"><aside className="github-readme-sidebar"><ReposSidebar {...props} onSelectRepo={handleSelectRepo} selectedFullName={selectedRepo?.full_name ?? null} /></aside><div className="github-readme-main"><ReadmeWorkspace selectedRepo={selectedRepo} readme={readme} readmeLoading={readmeLoading} readmeError={readmeError} readmeDraft={readmeDraft} setReadmeDraft={setReadmeDraft} editorKey={editorKey} viewerRef={viewerRef} editorScrollerRef={editorScrollerRef} syncScroll={syncScroll} handleViewerScroll={handleViewerScroll} renderMarkdown={props.renderMarkdown} /></div></div>);
+  return (<div className="github-readme-layout"><aside className="github-readme-sidebar"><ReposSidebar {...props} onSelectRepo={handleSelectRepo} selectedFullName={selectedRepo?.full_name ?? null} /></aside><div className="github-readme-main"><TabHeader viewMode={viewMode} setViewMode={setViewMode} /><ReadmeWorkspace viewMode={viewMode}  selectedRepo={selectedRepo} readme={readme} readmeLoading={readmeLoading} readmeError={readmeError} readmeDraft={readmeDraft} setReadmeDraft={setReadmeDraft} editorKey={editorKey} viewerRef={viewerRef} editorScrollerRef={editorScrollerRef} syncScroll={syncScroll} handleViewerScroll={handleViewerScroll} renderMarkdown={props.renderMarkdown} /></div></div>);
 }
