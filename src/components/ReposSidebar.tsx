@@ -14,3 +14,5 @@ export default function ReposSidebar({ getToken, listRepos, fetchProfile, onSele
       </button>
     ))}</div></div>;
 }
+
+// public filter option added
