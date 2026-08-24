@@ -25,3 +25,5 @@
 
 .github-tab-header { display:flex; gap:8px; padding:8px; }
 .github-readme-mode-toggle { display:flex; gap:2px; }
+
+.github-repos-count { font-size: 11px; color: var(--text-muted); }

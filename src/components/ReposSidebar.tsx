@@ -3,7 +3,7 @@ import type { RepoInfo, UserProfile } from "../types";
 interface Props { getToken: () => string; listRepos: () => Promise<RepoInfo[]>; fetchProfile: () => Promise<UserProfile>; onSelectRepo: (repo: RepoInfo) => void; selectedFullName?: string | null; }
 export default function ReposSidebar({ getToken, listRepos, fetchProfile, onSelectRepo, selectedFullName }: Props) {
   const { repos, loading, error } = useReposSidebar(getToken, listRepos, fetchProfile);
-  return <div className="github-repos-sidebar"><div className="github-repos-sidebar-header"><h4>GitHub Repos</h4></div><div className="github-repos-filter"><input placeholder="Filter…" value={filter} onChange={e=>setFilter(e.target.value)} /></div>
+  return <div className="github-repos-sidebar"><div className="github-repos-sidebar-header"><h4>GitHub Repos</h4></div><div className="github-repos-filter"><input placeholder="Filter…" value={filter} onChange={e=>setFilter(e.target.value)} /><span className="github-repos-count">{filtered.length}/{repos.length}</span></div>
     {loading && <div>Loading...</div>}
     {error && <div className="github-readme-error">{error}</div>}
     <div className="github-repos-list">{repos.map((repo) => (
