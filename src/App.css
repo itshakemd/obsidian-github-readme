@@ -27,3 +27,5 @@
 .github-readme-mode-toggle { display:flex; gap:2px; }
 
 .github-repos-count { font-size: 11px; color: var(--text-muted); }
+
+.github-profile-card { display:flex; gap:10px; padding:10px; border-top:1px solid var(--background-modifier-border); }
