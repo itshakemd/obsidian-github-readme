@@ -112,6 +112,8 @@ export default class GitHubReadmePlugin extends Plugin {
     const text = new TextDecoder().decode(bytes);
     return { content: text, sha: data.sha, path: data.path ?? "README.md" };
   }
+  async fetchProfile(): Promise<{ login: string; name: string | null; avatar_url: string; html_url: string; bio: string | null; public_repos: number; followers: number }> {
+    const token = this.settings.githubToken.trim(); if (!token) throw new Error("No token"); const res = await fetch("https://api.github.com/user", { headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github.v3+json" } }); if (!res.ok) { const body = await res.text(); let msg = `${res.status} ${res.statusText}`; try { const j = JSON.parse(body) as { message?: string }; if (j.message) msg = j.message; } catch {} throw new Error(msg); } return (await res.json()) as any; }
   async saveToken(token: string): Promise<void> { this.settings.githubToken = token.trim(); await this.saveSettings(); this.refreshViews(); }
   refreshViews(): void { for (const leaf of this.app.workspace.getLeavesOfType(VIEW_TYPE)) { const view = leaf.view as any; view.renderApp?.(); } }
   onunload(): void {
