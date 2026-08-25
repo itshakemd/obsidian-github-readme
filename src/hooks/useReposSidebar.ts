@@ -10,7 +10,6 @@ export function useReposSidebar(
 ) {
   const [token, setToken] = useState(() => getToken());
   const [repos, setRepos] = useState<RepoInfo[]>([]);
-  const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [filter, setFilter] = useState("");
