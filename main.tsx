@@ -1,4 +1,4 @@
-import { Component, ItemView, MarkdownRenderer, MarkdownView, normalizePath, Notice, Plugin, PluginSettingTab, Setting, TFile, WorkspaceLeaf } from "obsidian";
+import { Component, ItemView, MarkdownRenderer, MarkdownView, normalizePath, Notice, Plugin, PluginSettingTab, requestUrl, Setting, TFile, WorkspaceLeaf } from "obsidian";
 import { createRoot } from "react-dom/client";
 import type { Root } from "react-dom/client";
 import App from "./src/App";
@@ -76,10 +76,55 @@ class GitHubReadmeSettingTab extends PluginSettingTab {
     this.pluginInstance = pluginInstance;
   }
 
+  getSettingDefinitions() {
+    return [
+      {
+        name: "GitHub Personal Access Token",
+        desc: "Used to read/write README files via GitHub API. Stored locally in data.json.",
+        control: {
+          type: "text" as const,
+          key: "githubToken",
+          placeholder: "ghp_… or github_pat_…",
+        },
+      },
+      {
+        name: "Default view mode",
+        desc: "How READMEs open: editor only, rendered viewer only, or editor and viewer side by side.",
+        control: {
+          type: "dropdown" as const,
+          key: "defaultViewMode",
+          options: {
+            editor: "Editor",
+            viewer: "Viewer",
+            split: "Split",
+          },
+        },
+      },
+    ];
+  }
+
+  getControlValue(key: string): unknown {
+    if (key === "githubToken") return this.pluginInstance.settings.githubToken;
+    if (key === "defaultViewMode") return this.pluginInstance.settings.defaultViewMode;
+    return (this.pluginInstance.settings as unknown as Record<string, unknown>)[key];
+  }
+
+  async setControlValue(key: string, value: unknown): Promise<void> {
+    if (key === "githubToken") {
+      this.pluginInstance.settings.githubToken = String(value).trim();
+    } else if (key === "defaultViewMode") {
+      this.pluginInstance.settings.defaultViewMode = value as ViewMode;
+    } else {
+      (this.pluginInstance.settings as unknown as Record<string, unknown>)[key] = value;
+    }
+    await this.pluginInstance.saveSettings();
+    this.pluginInstance.refreshViews();
+  }
+
   display(): void {
     const { containerEl } = this;
     containerEl.empty();
-    containerEl.createEl("h2", { text: "GitHub README" });
+    new Setting(containerEl).setName("GitHub README").setHeading();
 
     let tokenInput: HTMLInputElement | null = null;
 
@@ -97,7 +142,7 @@ class GitHubReadmeSettingTab extends PluginSettingTab {
             this.pluginInstance.refreshViews();
           });
         text.inputEl.type = "password";
-        text.inputEl.style.width = "260px";
+        text.inputEl.addClass("github-readme-token-input");
         tokenInput = text.inputEl;
       })
       .addExtraButton((btn) => {
@@ -117,7 +162,7 @@ class GitHubReadmeSettingTab extends PluginSettingTab {
       .setName("Clear token")
       .setDesc("Remove the stored token.")
       .addButton((btn) => {
-        btn.setButtonText("Clear").setWarning().onClick(async () => {
+        btn.setButtonText("Clear").setDestructive().onClick(async () => {
           this.pluginInstance.settings.githubToken = "";
           await this.pluginInstance.saveSettings();
           this.pluginInstance.refreshViews();
@@ -160,18 +205,14 @@ export default class GitHubReadmePlugin extends Plugin {
     ribbonIconEl.addClass("github-readme-ribbon-icon");
 
     this.addCommand({
-      id: "open-github-readme-view",
-      name: "Open GitHub README",
+      id: "open-view",
+      name: "Open view",
       callback: () => {
         void this.activateView();
       },
     });
 
     this.addSettingTab(new GitHubReadmeSettingTab(this));
-  }
-
-  onunload(): void {
-    this.app.workspace.detachLeavesOfType(VIEW_TYPE);
   }
 
   async loadSettings(): Promise<void> {
