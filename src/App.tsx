@@ -36,6 +36,7 @@ export default function App({
   const [hasToken, setHasToken] = useState(() => getToken().length > 0);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- sync hasToken with external plugin settings on mount / token getter change
     setHasToken(getToken().length > 0);
   }, [getToken]);
 
@@ -71,7 +72,7 @@ export default function App({
           listRepos={listRepos}
           fetchProfile={fetchProfile}
           onOpenSettings={openSettings}
-          onSelectRepo={handleSelectRepo}
+          onSelectRepo={(repo) => { void handleSelectRepo(repo); }}
           selectedFullName={selectedRepo?.full_name ?? null}
           openingFullName={readmeLoading ? selectedRepo?.full_name ?? null : null}
         />
