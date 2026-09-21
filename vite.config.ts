@@ -8,6 +8,7 @@ function copyManifest() {
     name: "copy-manifest",
     closeBundle() {
       copyFileSync(resolve("manifest.json"), resolve("dist/manifest.json"));
+      copyFileSync(resolve("src/assets/logo.png"), resolve("dist/icon.png"));
       // Obsidian loads styles.css if present — rename vite's css output
       try {
         const dist = resolve("dist");
