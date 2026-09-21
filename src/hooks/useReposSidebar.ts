@@ -25,7 +25,7 @@ export function useReposSidebar(
       setProfile(null);
       return;
     }
-    setLoading(true); setError("");
+    setLoading(true);
     setError("");
     try {
       const data = await listRepos();

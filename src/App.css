@@ -1,34 +1,1312 @@
-/* base */
+.counter {
+  font-size: 16px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: var(--accent);
+  background: var(--accent-bg);
+  border: 2px solid transparent;
+  transition: border-color 0.3s;
+  margin-bottom: 24px;
 
-.github-readme-card { border: 1px solid var(--background-modifier-border); padding: 16px; }
+  &:hover {
+    border-color: var(--accent-border);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
 
-.github-readme-layout { display: flex; height: 100%; }
-.github-readme-sidebar { width: 300px; border-right: 1px solid var(--background-modifier-border); }
-.github-readme-main { flex: 1; }
+.hero {
+  position: relative;
 
-.github-repos-sidebar-header { display: flex; justify-content: space-between; padding: 0 2px; }
+  .base,
+  .framework,
+  .vite {
+    inset-inline: 0;
+    margin: 0 auto;
+  }
 
-.github-repos-item { display: flex; padding: 8px 10px; }
-.github-repos-name { font-weight: 600; }
+  .base {
+    width: 170px;
+    position: relative;
+    z-index: 0;
+  }
 
-.github-repos-private { font-size: 10px; padding: 0 6px; border: 1px solid var(--background-modifier-border); }
+  .framework,
+  .vite {
+    position: absolute;
+  }
 
-.github-repos-desc { font-size: 12px; color: var(--text-muted); }
-.github-repos-meta { font-size: 11px; color: var(--text-muted); }
+  .framework {
+    z-index: 1;
+    top: 34px;
+    height: 28px;
+    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
+      scale(1.4);
+  }
 
-.github-repos-item.active { background: var(--background-modifier-hover); }
-.github-repos-item.active::before { content: ""; position: absolute; left: 2px; top: 8px; bottom: 8px; width: 3px; background: var(--interactive-accent); }
+  .vite {
+    z-index: 0;
+    top: 107px;
+    height: 26px;
+    width: auto;
+    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
+      scale(0.8);
+  }
+}
 
-.github-spinner { width: 18px; height: 18px; border: 2px solid var(--background-modifier-border); border-top-color: var(--interactive-accent); border-radius: 50%; animation: github-spin 0.7s linear infinite; }
-@keyframes github-spin { to { transform: rotate(360deg); } }
-.github-readme-loading { display: flex; align-items: center; justify-content: center; padding: 24px; }
+#center {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  place-content: center;
+  place-items: center;
+  flex-grow: 1;
 
-.github-tab-header { display:flex; gap:8px; padding:8px; }
-.github-readme-mode-toggle { display:flex; gap:2px; }
+  @media (max-width: 1024px) {
+    padding: 32px 20px 24px;
+    gap: 18px;
+  }
+}
 
-.github-repos-count { font-size: 11px; color: var(--text-muted); }
+#next-steps {
+  display: flex;
+  border-top: 1px solid var(--border);
+  text-align: left;
 
-.github-profile-card { display:flex; gap:10px; padding:10px; border-top:1px solid var(--background-modifier-border); }
+  & > div {
+    flex: 1 1 0;
+    padding: 32px;
+    @media (max-width: 1024px) {
+      padding: 24px 20px;
+    }
+  }
 
-.github-commit-group { display:flex; flex:1; }
-.github-commit-input { flex:1; }
+  .icon {
+    margin-bottom: 16px;
+    width: 22px;
+    height: 22px;
+  }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+#docs {
+  border-right: 1px solid var(--border);
+
+  @media (max-width: 1024px) {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+}
+
+#next-steps ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 8px;
+  margin: 32px 0 0;
+
+  .logo {
+    height: 18px;
+  }
+
+  a {
+    color: var(--text-h);
+    font-size: 16px;
+    border-radius: 6px;
+    background: var(--social-bg);
+    display: flex;
+    padding: 6px 12px;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: box-shadow 0.3s;
+
+    &:hover {
+      box-shadow: var(--shadow);
+    }
+    .button-icon {
+      height: 18px;
+      width: 18px;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    li {
+      flex: 1 1 calc(50% - 8px);
+    }
+
+    a {
+      width: 100%;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+  }
+}
+
+#spacer {
+  height: 88px;
+  border-top: 1px solid var(--border);
+  @media (max-width: 1024px) {
+    height: 48px;
+  }
+}
+.ticks {
+  position: relative;
+  width: 100%;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: -4.5px;
+    border: 5px solid transparent;
+  }
+
+  &::before {
+    left: 0;
+    border-left-color: var(--border);
+  }
+
+  &::after {
+    right: 0;
+    border-right-color: var(--border);
+  }
+}
+
+/* GitHub README plugin - internal sidebar layout */
+.github-readme-layout {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  background: var(--background-primary);
+}
+
+.github-readme-sidebar {
+  width: 300px;
+  min-width: 260px;
+  max-width: 360px;
+  flex: 0 0 300px;
+  border-right: 1px solid var(--background-modifier-border);
+  background: var(--background-secondary);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.github-readme-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  background: var(--background-primary);
+  display: flex;
+  flex-direction: column;
+}
+
+.github-tab-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  background: var(--background-secondary);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* ── commit message + push button ── */
+.github-tab-header .github-commit-group {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  height: var(--input-height);
+  box-sizing: border-box;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--input-radius);
+  background: var(--background-primary);
+  overflow: hidden;
+}
+
+.github-tab-header .github-commit-group:focus-within {
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 1px var(--interactive-accent);
+}
+
+.github-tab-header .github-commit-group input.github-commit-input {
+  flex: 1 1 auto;
+  height: 100% !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  padding: 0 10px !important;
+  margin: 0 !important;
+  font: inherit !important;
+  color: var(--text-normal) !important;
+}
+
+.github-tab-header .github-commit-group button.github-push-btn {
+  height: 100% !important;
+  border: none !important;
+  border-left: 1px solid var(--background-modifier-border) !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  padding: 0 14px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font: inherit !important;
+  font-size: var(--font-ui-small) !important;
+  white-space: nowrap !important;
+  color: var(--text-muted) !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.github-tab-header .github-commit-group button.github-push-btn:hover:not(:disabled) {
+  background: var(--interactive-accent) !important;
+  color: var(--text-on-accent) !important;
+}
+
+.github-tab-header .github-commit-group button.github-push-btn:disabled {
+  opacity: 0.5 !important;
+  cursor: default !important;
+}
+
+/* ── mode toggle (Editor / Viewer / Split) ── */
+.github-tab-header .github-readme-mode-toggle {
+  display: flex;
+  align-items: center;
+  height: var(--input-height);
+  box-sizing: border-box;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--input-radius);
+  background: var(--background-primary);
+  padding: 2px;
+  gap: 2px;
+}
+
+.github-tab-header .github-readme-mode-toggle .github-readme-mode-btn {
+  height: 100% !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  padding: 0 10px !important;
+  margin: 0 !important;
+  border-radius: calc(var(--input-radius) - 2px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: var(--text-muted) !important;
+  cursor: pointer !important;
+}
+
+.github-tab-header .github-readme-mode-btn svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.github-tab-header .github-readme-mode-btn:hover:not(.active):not(:disabled) {
+  background: var(--background-modifier-hover) !important;
+  color: var(--text-normal) !important;
+}
+
+.github-tab-header .github-readme-mode-btn.active {
+  background: var(--interactive-accent) !important;
+  color: var(--text-on-accent) !important;
+}
+
+.github-tab-header .github-readme-mode-btn:focus-visible {
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: 1px;
+}
+
+.github-tab-header .github-readme-mode-btn:disabled {
+  opacity: 0.5 !important;
+  cursor: default !important;
+}
+
+/* ── open-in-tab button ── */
+.github-tab-header .github-readme-open-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: var(--input-height) !important;
+  width: var(--input-height) !important;
+  box-sizing: border-box !important;
+  border: 1px solid var(--background-modifier-border) !important;
+  border-radius: var(--input-radius) !important;
+  background: var(--background-primary) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  color: var(--text-muted) !important;
+  cursor: pointer !important;
+}
+
+.github-tab-header .github-readme-open-btn svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.github-tab-header .github-readme-open-btn:hover:not(:disabled) {
+  background: var(--background-modifier-hover) !important;
+  color: var(--text-normal) !important;
+}
+
+.github-tab-header .github-readme-open-btn:focus-visible {
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: 1px;
+}
+
+.github-tab-header .github-readme-open-btn:disabled {
+  opacity: 0.5 !important;
+  cursor: default !important;
+}
+
+
+
+@media (max-width: 700px) {
+  .github-readme-layout {
+    flex-direction: column;
+  }
+  .github-readme-sidebar {
+    width: 100%;
+    max-width: none;
+    flex: 0 0 auto;
+    max-height: 45vh;
+    border-right: none;
+    border-bottom: 1px solid var(--background-modifier-border);
+  }
+}
+
+.github-readme-root {
+  max-width: 640px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 16px 20px 32px;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  gap: 16px;
+}
+
+.github-readme-header h2 {
+  margin: 0 0 4px;
+}
+
+.github-readme-root.fill {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+}
+
+/* the tab header already draws the top line, and the tab edge closes the bottom */
+.github-readme-root.fill .github-readme-editor-wrap,
+.github-readme-root.fill .github-readme-viewer {
+  border-top: 0;
+  border-bottom: 0;
+}
+
+.github-readme-empty {
+  margin: auto;
+  padding: 32px 0;
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.github-repos-waiting {
+  margin: auto;
+  padding: 32px 16px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.github-readme-subtitle {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.github-readme-card {
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  padding: 16px;
+  background: var(--background-primary);
+}
+
+.github-readme-card.muted {
+  background: var(--background-secondary);
+}
+
+/* Onboarding card shown before a token is connected: centered on the page
+   and roughly square, rather than a left-aligned strip. */
+.github-readme-connect-card {
+  margin: auto;
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 4px;
+  padding: 24px;
+  border-radius: 12px;
+}
+
+.github-readme-connect-icon {
+  width: 36px;
+  height: 36px;
+  margin-bottom: 8px;
+  color: var(--text-muted);
+}
+
+.github-readme-connect-card h4 {
+  margin: 0 0 4px;
+}
+
+.github-readme-connect-card .github-readme-help {
+  margin: 0 0 4px;
+}
+
+.github-readme-connect-card .github-readme-actions {
+  justify-content: center;
+}
+
+.github-readme-card h3,
+.github-readme-card h4 {
+  margin: 0 0 8px;
+}
+
+.github-readme-help {
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.4;
+  margin: 0 0 12px;
+}
+
+.github-readme-help code {
+  font-size: 12px;
+}
+
+.github-readme-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.github-readme-label {
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.github-readme-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 10px;
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+}
+
+.github-readme-badge.muted {
+  background: var(--background-modifier-border);
+  color: var(--text-muted);
+}
+
+.github-readme-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.github-readme-input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.github-readme-icon-btn {
+  white-space: nowrap;
+}
+
+.github-readme-warn,
+.github-readme-meta {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.github-readme-warn code {
+  font-size: 11px;
+}
+
+.github-readme-meta code {
+  font-size: 11px;
+}
+
+.github-readme-error {
+  color: var(--text-error);
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--background-modifier-error);
+  border: 1px solid var(--background-modifier-error-border);
+}
+
+.github-readme-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.github-readme-verify {
+  margin-top: 10px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.github-readme-verify.ok {
+  background: rgba(0, 128, 0, 0.12);
+  border: 1px solid rgba(0, 128, 0, 0.25);
+}
+
+.github-readme-verify.failed {
+  background: var(--background-modifier-error);
+  border: 1px solid var(--background-modifier-error-border);
+  color: var(--text-error);
+}
+
+.github-readme-verify.verifying {
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  color: var(--text-muted);
+}
+
+.github-readme-details {
+  margin-top: 14px;
+  font-size: 13px;
+}
+
+.github-readme-details summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.github-readme-details ol {
+  margin: 8px 0 0;
+  padding-left: 20px;
+}
+
+.github-readme-details a {
+  word-break: break-all;
+}
+
+.github-readme-repos {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.github-readme-repos-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.github-readme-repos-header h3 {
+  margin: 0;
+}
+
+.github-readme-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.github-readme-count {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.github-readme-muted {
+  font-size: 13px;
+  color: var(--text-muted);
+  padding: 6px 0;
+}
+
+.github-readme-repo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.github-readme-repo-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-secondary);
+  cursor: pointer;
+  width: 100%;
+}
+
+.github-readme-repo-item:hover {
+  border-color: var(--interactive-accent);
+  background: var(--background-modifier-hover);
+}
+
+.github-readme-repo-item.selected {
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 1px var(--interactive-accent);
+}
+
+.github-readme-repo-item:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.github-readme-repo-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-normal);
+  width: 100%;
+}
+
+.github-readme-repo-fullname {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.github-readme-private {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--background-modifier-border);
+  color: var(--text-muted);
+}
+
+.github-readme-repo-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  width: 100%;
+}
+
+.github-readme-repo-meta {
+  display: flex;
+  gap: 10px;
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+.github-readme-repo-loading {
+  font-size: 12px;
+  color: var(--interactive-accent);
+  font-weight: 600;
+}
+
+/* Sidebar repos view (right sidebar) */
+.github-repos-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 8px 4px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.github-repos-sidebar.empty {
+  padding: 12px;
+}
+
+.github-repos-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 2px;
+}
+
+.github-repos-sidebar-header h4 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.github-repos-refresh {
+  font-size: 14px;
+  line-height: 1;
+  padding: 4px 8px;
+}
+
+.github-repos-filter {
+  display: flex;
+  align-items: center;
+  padding: 0 2px;
+}
+
+/* search field, count and visibility dropdown drawn as one control */
+.github-repos-filter-group {
+  display: flex;
+  align-items: stretch;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: var(--input-height, 30px);
+  box-sizing: border-box;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--input-radius, 6px);
+  background: var(--background-primary);
+}
+
+.github-repos-filter-group:focus-within {
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 1px var(--interactive-accent);
+}
+
+.github-repos-filter-group .github-repos-filter-input,
+.github-repos-filter-group .github-repos-filter-input:hover,
+.github-repos-filter-group .github-repos-filter-input:focus,
+.github-repos-filter-group .github-repos-filter-input:active {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: auto;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+.github-repos-count {
+  align-self: center;
+  padding-right: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.github-repos-visibility-wrap {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+}
+
+.github-repos-filter .github-repos-visibility {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  box-sizing: border-box;
+  height: auto;
+  margin: 0;
+  padding: 0 8px;
+  border: 0;
+  border-left: 1px solid var(--background-modifier-border);
+  border-radius: 0 calc(var(--input-radius, 6px) - 1px) calc(var(--input-radius, 6px) - 1px) 0;
+  box-shadow: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.github-repos-visibility svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.github-repos-visibility .github-repos-visibility-chevron {
+  width: 11px;
+  height: 11px;
+  opacity: 0.75;
+}
+
+.github-repos-visibility-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 150px;
+  padding: 4px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-m, 8px);
+  background: var(--background-primary);
+  box-shadow: var(--shadow-s, 0 4px 12px rgba(0, 0, 0, 0.25));
+}
+
+.github-repos-visibility-menu .github-repos-visibility-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: var(--radius-s, 4px);
+  box-shadow: none;
+  background: transparent;
+  color: var(--text-normal);
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.github-repos-visibility-menu .github-repos-visibility-option:hover,
+.github-repos-visibility-menu .github-repos-visibility-option.selected {
+  background: var(--background-modifier-hover);
+}
+
+.github-repos-visibility-option span {
+  flex: 1 1 auto;
+}
+
+.github-repos-visibility-option svg {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  color: var(--text-muted);
+}
+
+.github-repos-visibility-option svg.check {
+  color: var(--interactive-accent);
+}
+
+.github-repos-filter .github-repos-visibility:hover {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+/* public / private selected */
+.github-repos-filter .github-repos-visibility.active {
+  background: var(--interactive-accent);
+  border-left-color: var(--interactive-accent);
+  color: var(--text-on-accent);
+}
+
+.github-repos-visibility:focus-visible {
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: 1px;
+}
+
+.github-repos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 2px;
+}
+
+.github-repos-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  height: auto;
+  text-align: left;
+  font: inherit;
+  padding: 8px 10px 8px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+  width: 100%;
+  position: relative;
+}
+
+.github-repos-item:hover {
+  background: var(--background-modifier-hover);
+}
+
+.github-repos-item.active {
+  background: var(--background-modifier-hover);
+}
+
+/* accent bar marks the open repo */
+.github-repos-item.active::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--interactive-accent);
+}
+
+.github-repos-item:focus-visible {
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: -2px;
+}
+
+.github-repos-item:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.github-repos-item-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-normal);
+}
+
+.github-repos-name {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.github-repos-private {
+  flex: 0 0 auto;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.5;
+  padding: 0 6px;
+  border-radius: 999px;
+  border: 1px solid var(--background-modifier-border);
+  color: var(--text-muted);
+}
+
+.github-repos-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  width: 100%;
+}
+
+.github-repos-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 10px;
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Loading spinner */
+.github-spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  border: 2px solid var(--background-modifier-border);
+  border-top-color: var(--interactive-accent);
+  border-radius: 50%;
+  animation: github-spin 0.7s linear infinite;
+}
+
+.github-spinner.small {
+  width: 12px;
+  height: 12px;
+}
+
+.github-repos-item-top .github-spinner {
+  margin-left: auto;
+}
+
+.github-readme-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+  min-height: 120px;
+  padding: 24px 16px;
+}
+
+@keyframes github-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .github-spinner { animation-duration: 2s; }
+}
+
+.github-readme-workspace {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  box-sizing: border-box;
+  gap: 0;
+}
+
+.github-readme-workspace-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex: 0 0 auto;
+  padding: 12px 16px 0;
+}
+
+.github-readme-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  gap: 0;
+}
+
+.github-readme-content.mode-split {
+  flex-direction: row;
+}
+
+.github-readme-content > .github-readme-editor-wrap,
+.github-readme-content > .github-readme-viewer {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+}
+
+.github-readme-content.mode-split > .github-readme-editor-wrap {
+  border-right: 1px solid var(--background-modifier-border);
+}
+
+.github-readme-editor-wrap {
+  border-top: 1px solid var(--background-modifier-border);
+  border-bottom: 1px solid var(--background-modifier-border);
+  overflow: hidden;
+  background: var(--background-primary);
+  flex: 1 1 auto;
+  min-height: 200px;
+  width: 100%;
+  display: flex;
+}
+
+/* CodeMirror editor container */
+.github-readme-cm-editor {
+  width: 100%;
+  height: 100%;
+  flex: 1 1 auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Make the CM editor itself fill the container */
+.github-readme-cm-editor .cm-editor {
+  width: 100%;
+  height: 100%;
+  flex: 1 1 auto;
+  border: none !important;
+  outline: none !important;
+}
+
+.github-readme-cm-editor .cm-scroller {
+  overflow: auto;
+}
+
+.github-readme-viewer {
+  border-top: 1px solid var(--background-modifier-border);
+  border-bottom: 1px solid var(--background-modifier-border);
+  overflow: auto;
+  background: var(--background-secondary);
+  padding: 12px 16px;
+  min-height: 200px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.github-readme-viewer-text {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-normal);
+}
+
+/* Rendered markdown (Viewer / Split): typography comes from Obsidian's .markdown-rendered */
+.github-readme-markdown > :first-child { margin-top: 0; }
+.github-readme-markdown img { max-width: 100%; height: auto; }
+
+.github-readme-workspace > .github-readme-muted,
+.github-readme-workspace > .github-readme-error,
+.github-readme-workspace > .github-readme-actions,
+.github-readme-workspace > .github-readme-verify {
+  padding-inline: 16px;
+}
+
+.github-readme-workspace > .github-readme-error,
+.github-readme-workspace > .github-readme-verify {
+  margin: 8px 0;
+}
+
+.github-readme-editor:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 1px var(--interactive-accent);
+}
+
+.github-readme-preview {
+  max-height: 240px;
+  overflow: auto;
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
+
+.github-profile-card {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 8px;
+  border-top: 1px solid var(--background-modifier-border);
+  background: var(--background-primary);
+  border-radius: 8px;
+  margin-left: 4px;
+  margin-right: 4px;
+  margin-bottom: 0;
+}
+
+.github-profile-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.github-profile-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid var(--background-modifier-border);
+}
+
+.github-profile-avatar.placeholder {
+  background: var(--background-modifier-border);
+}
+
+.github-profile-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.github-profile-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-normal);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.github-profile-login {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.github-profile-login:hover {
+  color: var(--text-accent);
+  text-decoration: underline;
+}
+
+.github-profile-bio {
+  font-size: 10px;
+  color: var(--text-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.github-profile-settings-btn {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-secondary);
+  cursor: pointer;
+  padding: 0;
+}
+
+.github-profile-settings-btn:hover {
+  background: var(--background-modifier-hover);
+  border-color: var(--interactive-accent);
+}
+
+.github-profile-settings-icon {
+  font-size: 14px;
+  line-height: 1;
+}

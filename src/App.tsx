@@ -1,22 +1,123 @@
-import { useState, useRef, useCallback } from "react";
+import { useEffect, useState } from "react";
+import "./App.css";
 import ReposSidebar from "./components/ReposSidebar";
+import TabHeader from "./components/TabHeader";
 import ConnectCard from "./components/ConnectCard";
 import ReadmeWorkspace from "./components/ReadmeWorkspace";
-import type { RepoInfo, ReadmeData } from "./types";
-export default function App(props: any) {
-  const [selectedRepo, setSelectedRepo] = useState<RepoInfo | null>(null);
-  const [readme, setReadme] = useState<ReadmeData | null>(null);
-  const [readmeDraft, setReadmeDraft] = useState("");
-  const [readmeLoading, setReadmeLoading] = useState(false);
-  const [readmeError, setReadmeError] = useState("");
-  const [editorKey, setEditorKey] = useState(0);
-  const [viewMode, setViewMode] = useState("editor");
-  const viewerRef = useRef<HTMLDivElement>(null);
-  const editorScrollerRef = useRef<HTMLElement | null>(null);
-  const syncScroll = useCallback((from: "editor" | "viewer", ratio: number) => {
-    if (from === "editor") { const dst = viewerRef.current; if (!dst) return; const max = dst.scrollHeight - dst.clientHeight; if (max <=0) return; dst.scrollTop = ratio * max; } else { const dst = editorScrollerRef.current; if (!dst) return; const max = dst.scrollHeight - dst.clientHeight; if (max <=0) return; dst.scrollTop = ratio * max; }
-  }, []);
-  const handleViewerScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => { const el = e.currentTarget; const max = el.scrollHeight - el.clientHeight; if (max>0) syncScroll("viewer", el.scrollTop / max); }, [syncScroll]);
-  const handleSelectRepo = async (repo: RepoInfo) => { setSelectedRepo(repo); setReadme(null); setReadmeDraft(""); setReadmeError(""); setReadmeLoading(true); try { const data = await props.fetchReadme(repo.full_name); setReadme(data); setReadmeDraft(data.content); setEditorKey(k=>k+1);} catch(e){ setReadmeError(e instanceof Error? e.message: String(e));} finally { setReadmeLoading(false);} };
-  return (<div className="github-readme-layout"><aside className="github-readme-sidebar"><ReposSidebar {...props} onSelectRepo={handleSelectRepo} selectedFullName={selectedRepo?.full_name ?? null} /></aside><div className="github-readme-main"><TabHeader viewMode={viewMode} setViewMode={setViewMode} /><ReadmeWorkspace viewMode={viewMode}  selectedRepo={selectedRepo} readme={readme} readmeLoading={readmeLoading} readmeError={readmeError} readmeDraft={readmeDraft} setReadmeDraft={setReadmeDraft} editorKey={editorKey} viewerRef={viewerRef} editorScrollerRef={editorScrollerRef} syncScroll={syncScroll} handleViewerScroll={handleViewerScroll} renderMarkdown={props.renderMarkdown} /></div></div>);
+import { useReadmeEditor } from "./hooks/useReadmeEditor";
+import type { ReadmeData, RepoInfo, UserProfile, ViewMode } from "./types";
+
+interface AppProps {
+  getToken: () => string;
+  saveToken: (token: string) => Promise<void>;
+  listRepos: () => Promise<RepoInfo[]>;
+  fetchReadme: (fullName: string) => Promise<ReadmeData>;
+  saveReadme: (fullName: string, content: string, sha: string | null, message?: string) => Promise<string>;
+  openReadme: (fullName: string, content: string) => Promise<string>;
+  watchFile: (vaultPath: string, onChange: (content: string) => void) => () => void;
+  fetchProfile: () => Promise<UserProfile>;
+  openSettings: () => void;
+  defaultViewMode: ViewMode;
+  renderMarkdown: (markdown: string, el: HTMLElement) => Promise<() => void>;
+}
+
+export default function App({
+  getToken,
+  listRepos,
+  fetchReadme,
+  saveReadme,
+  fetchProfile,
+  openSettings,
+  openReadme,
+  watchFile,
+  defaultViewMode,
+  renderMarkdown,
+}: AppProps) {
+  const [hasToken, setHasToken] = useState(() => getToken().length > 0);
+
+  useEffect(() => {
+    setHasToken(getToken().length > 0);
+  }, [getToken]);
+
+  const {
+    editorKey,
+    isWatching,
+    selectedRepo,
+    readme,
+    readmeDraft,
+    setReadmeDraft,
+    readmeLoading,
+    readmeError,
+    readmeSaving,
+    readmeSaved,
+    commitMsg,
+    setCommitMsg,
+    viewMode,
+    setViewMode,
+    viewerRef,
+    editorScrollerRef,
+    syncScroll,
+    handleViewerScroll,
+    handleSelectRepo,
+    handlePushCommit,
+    handleOpenInObsidian,
+  } = useReadmeEditor(defaultViewMode, fetchReadme, saveReadme, openReadme, watchFile);
+
+  return (
+    <div className="github-readme-layout">
+      <aside className="github-readme-sidebar">
+        <ReposSidebar
+          getToken={getToken}
+          listRepos={listRepos}
+          fetchProfile={fetchProfile}
+          onOpenSettings={openSettings}
+          onSelectRepo={handleSelectRepo}
+          selectedFullName={selectedRepo?.full_name ?? null}
+          openingFullName={readmeLoading ? selectedRepo?.full_name ?? null : null}
+        />
+      </aside>
+
+      <div className="github-readme-main">
+        <TabHeader
+          commitMsg={commitMsg}
+          setCommitMsg={setCommitMsg}
+          handlePushCommit={handlePushCommit}
+          selectedRepo={!!selectedRepo}
+          hasReadme={!!readme}
+          hasDraftChanges={readmeDraft !== readme?.content}
+          readmeSaving={readmeSaving}
+          viewMode={viewMode}
+          setViewMode={setViewMode}
+          isWatching={isWatching}
+          handleOpenInObsidian={handleOpenInObsidian}
+          repoFullName={selectedRepo?.full_name ?? null}
+        />
+
+        <div className={`github-readme-root ${selectedRepo ? "fill" : ""}`}>
+          <ReadmeWorkspace
+            selectedRepo={selectedRepo}
+            readmeLoading={readmeLoading}
+            readmeError={readmeError}
+            readme={readme}
+            readmeDraft={readmeDraft}
+            setReadmeDraft={setReadmeDraft}
+            viewMode={viewMode}
+            editorKey={editorKey}
+            syncScroll={syncScroll}
+            editorScrollerRef={editorScrollerRef}
+            viewerRef={viewerRef}
+            handleViewerScroll={handleViewerScroll}
+            renderMarkdown={renderMarkdown}
+            readmeSaved={readmeSaved}
+          />
+
+          {!hasToken && <ConnectCard openSettings={openSettings} />}
+
+          {!selectedRepo && hasToken && (
+            <div className="github-readme-empty">GitHub readme</div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
