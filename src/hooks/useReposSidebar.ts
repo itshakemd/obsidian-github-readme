@@ -55,6 +55,7 @@ export function useReposSidebar(
   }, [getToken, fetchProfile]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- initial data load on mount triggers setState via callbacks, intentional
     void fetchRepos();
     void fetchUser();
   }, [fetchRepos, fetchUser]);

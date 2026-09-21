@@ -12,7 +12,7 @@ interface Props {
   viewMode: ViewMode;
   editorKey: number;
   syncScroll: (from: "editor" | "viewer", ratio: number) => void;
-  editorScrollerRef: React.MutableRefObject<HTMLElement | null>;
+  editorScrollerRef: React.RefObject<HTMLElement | null>;
   viewerRef: React.RefObject<HTMLDivElement | null>;
   handleViewerScroll: (e: React.UIEvent<HTMLDivElement>) => void;
   renderMarkdown: (markdown: string, el: HTMLElement) => Promise<() => void>;

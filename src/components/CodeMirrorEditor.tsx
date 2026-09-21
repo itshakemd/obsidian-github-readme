@@ -33,8 +33,10 @@ export default function CodeMirrorEditor({ value, onChange, onScroll, scrollerRe
   const containerRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
   const onChangeRef = useRef(onChange);
+  // eslint-disable-next-line react-hooks/refs -- keep callback ref up to date without triggering re-render
   onChangeRef.current = onChange;
   const onScrollRef = useRef(onScroll);
+  // eslint-disable-next-line react-hooks/refs -- keep callback ref up to date without triggering re-render
   onScrollRef.current = onScroll;
 
   useEffect(() => {
@@ -112,7 +114,7 @@ export default function CodeMirrorEditor({ value, onChange, onScroll, scrollerRe
       viewRef.current = null;
       if (scrollerRef) scrollerRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- view initialization should only run when value prop changes for remount (editorKey), onChange/onScroll are stored in refs
   }, [value]);
 
   return <div ref={containerRef} className={`github-readme-cm-editor${className ? ` ${className}` : ""}`} />;

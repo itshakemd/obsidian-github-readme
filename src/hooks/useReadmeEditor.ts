@@ -23,6 +23,7 @@ export function useReadmeEditor(
   const [viewMode, setViewMode] = useState<ViewMode>(defaultViewMode);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- sync viewMode with plugin default setting
     setViewMode(defaultViewMode);
   }, [defaultViewMode]);
 
@@ -101,7 +102,7 @@ export function useReadmeEditor(
       const newSha = await saveReadme(selectedRepo.full_name, readmeDraft, readme.sha, msg);
       setReadme({ ...readme, content: readmeDraft, sha: newSha || readme.sha });
       setReadmeSaved(true);
-      setTimeout(() => setReadmeSaved(false), 2000);
+      window.setTimeout(() => setReadmeSaved(false), 2000);
     } catch (e) {
       setReadmeError(e instanceof Error ? e.message : String(e));
     } finally {
