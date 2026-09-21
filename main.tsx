@@ -240,25 +240,27 @@ export default class GitHubReadmePlugin extends Plugin {
     const repos: RepoInfo[] = [];
     let page = 1;
     while (true) {
-      const res = await fetch(
-        `https://api.github.com/user/repos?per_page=100&page=${page}&sort=updated&affiliation=owner,collaborator,organization_member`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/vnd.github.v3+json",
-          },
-        }
-      );
-      if (!res.ok) {
-        const body = await res.text();
-        let msg = `${res.status} ${res.statusText}`;
+      const res = await requestUrl({
+        url: `https://api.github.com/user/repos?per_page=100&page=${page}&sort=updated&affiliation=owner,collaborator,organization_member`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/vnd.github.v3+json",
+        },
+        throw: false,
+      });
+      if (res.status < 200 || res.status >= 300) {
+        const body = res.text;
+        let msg = `${res.status} ${res.headers["status"] ?? ""}`.trim();
+        if (!msg || msg === String(res.status)) msg = `${res.status}`;
         try {
           const j = JSON.parse(body) as { message?: string };
           if (j.message) msg = j.message;
-        } catch { /* ignore */ }
+        } catch {
+          // ignore JSON parse failure, use status message
+        }
         throw new Error(msg);
       }
-      const batch = (await res.json()) as RepoInfo[];
+      const batch = res.json as RepoInfo[];
       repos.push(...batch);
       if (batch.length < 100) break;
       page += 1;
@@ -273,18 +275,24 @@ export default class GitHubReadmePlugin extends Plugin {
       Accept: "application/vnd.github.v3+json",
     };
     if (token) headers.Authorization = `Bearer ${token}`;
-    const res = await fetch(`https://api.github.com/repos/${fullName}/readme`, { headers });
-    if (!res.ok) {
-      const body = await res.text();
-      let msg = `${res.status} ${res.statusText}`;
+    const res = await requestUrl({
+      url: `https://api.github.com/repos/${fullName}/readme`,
+      headers,
+      throw: false,
+    });
+    if (res.status < 200 || res.status >= 300) {
+      const body = res.text;
+      let msg = `${res.status}`;
       try {
         const j = JSON.parse(body) as { message?: string };
         if (j.message) msg = j.message;
-      } catch { /* ignore */ }
+      } catch {
+        // ignore JSON parse failure
+      }
       if (res.status === 404) throw new Error("No README found for this repository");
       throw new Error(msg);
     }
-    const data = (await res.json()) as { content: string; encoding: string; sha: string; path: string; name: string };
+    const data = res.json as { content: string; encoding: string; sha: string; path: string; name: string };
     if (data.encoding !== "base64" || !data.content) throw new Error("Unexpected README encoding");
     const b64 = data.content.replace(/\n/g, "");
     const binary = atob(b64);
@@ -296,22 +304,26 @@ export default class GitHubReadmePlugin extends Plugin {
   async fetchProfile(): Promise<{ login: string; name: string | null; avatar_url: string; html_url: string; bio: string | null; public_repos: number; followers: number }> {
     const token = this.settings.githubToken.trim();
     if (!token) throw new Error("No token");
-    const res = await fetch("https://api.github.com/user", {
+    const res = await requestUrl({
+      url: "https://api.github.com/user",
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: "application/vnd.github.v3+json",
       },
+      throw: false,
     });
-    if (!res.ok) {
-      const body = await res.text();
-      let msg = `${res.status} ${res.statusText}`;
+    if (res.status < 200 || res.status >= 300) {
+      const body = res.text;
+      let msg = `${res.status}`;
       try {
         const j = JSON.parse(body) as { message?: string };
         if (j.message) msg = j.message;
-      } catch { /* ignore */ }
+      } catch {
+        // ignore JSON parse failure
+      }
       throw new Error(msg);
     }
-    return (await res.json()) as { login: string; name: string | null; avatar_url: string; html_url: string; bio: string | null; public_repos: number; followers: number };
+    return res.json as { login: string; name: string | null; avatar_url: string; html_url: string; bio: string | null; public_repos: number; followers: number };
   }
 
   openSettings(): void {
@@ -320,7 +332,9 @@ export default class GitHubReadmePlugin extends Plugin {
       setting.open();
       setting.openTabById(this.manifest.id);
     } catch {
-      try { setting.open(); } catch {}
+      try { setting.open(); } catch {
+        // ignore: setting modal may not be available
+      }
     }
   }
 
@@ -337,10 +351,13 @@ export default class GitHubReadmePlugin extends Plugin {
       try {
         const info = await this.fetchReadme(fullName);
         path = info.path;
-      } catch {}
+      } catch {
+        // ignore: fallback to default README.md path
+      }
     }
 
-    const res = await fetch(`https://api.github.com/repos/${fullName}/contents/${encodeURIComponent(path)}`, {
+    const res = await requestUrl({
+      url: `https://api.github.com/repos/${fullName}/contents/${encodeURIComponent(path)}`,
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -352,17 +369,20 @@ export default class GitHubReadmePlugin extends Plugin {
         content: b64,
         sha: sha ?? undefined,
       }),
+      throw: false,
     });
-    if (!res.ok) {
-      const body = await res.text();
-      let msg = `${res.status} ${res.statusText}`;
+    if (res.status < 200 || res.status >= 300) {
+      const body = res.text;
+      let msg = `${res.status}`;
       try {
         const j = JSON.parse(body) as { message?: string };
         if (j.message) msg = j.message;
-      } catch { /* ignore */ }
+      } catch {
+        // ignore JSON parse failure
+      }
       throw new Error(msg);
     }
-    const data = (await res.json()) as { content?: { sha: string } };
+    const data = res.json as { content?: { sha: string } };
     return data.content?.sha ?? "";
   }
 
@@ -377,7 +397,9 @@ export default class GitHubReadmePlugin extends Plugin {
         if (!this.app.vault.getAbstractFileByPath(cur)) {
           try {
             await this.app.vault.createFolder(cur);
-          } catch { /* ignore */ }
+          } catch {
+            // ignore: folder may already exist
+          }
         }
       }
     }
@@ -405,7 +427,9 @@ export default class GitHubReadmePlugin extends Plugin {
         try {
           const content = await this.app.vault.read(file);
           onChange(content);
-        } catch {}
+        } catch {
+          // ignore: file may have been deleted
+        }
       }
     });
     return () => this.app.vault.offref(ref);
