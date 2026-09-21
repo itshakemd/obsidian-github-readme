@@ -245,42 +245,42 @@
 
 .github-tab-header .github-commit-group input.github-commit-input {
   flex: 1 1 auto;
-  height: 100% !important;
-  border: none !important;
-  box-shadow: none !important;
-  background: transparent !important;
-  padding: 0 10px !important;
-  margin: 0 !important;
-  font: inherit !important;
-  color: var(--text-normal) !important;
+  height: 100%;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  padding: 0 10px;
+  margin: 0;
+  font: inherit;
+  color: var(--text-normal);
 }
 
 .github-tab-header .github-commit-group button.github-push-btn {
-  height: 100% !important;
-  border: none !important;
-  border-left: 1px solid var(--background-modifier-border) !important;
-  border-radius: 0 !important;
-  margin: 0 !important;
-  padding: 0 14px !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  font: inherit !important;
-  font-size: var(--font-ui-small) !important;
-  white-space: nowrap !important;
-  color: var(--text-muted) !important;
-  cursor: pointer !important;
-  display: flex !important;
-  align-items: center !important;
+  height: 100%;
+  border: none;
+  border-left: 1px solid var(--background-modifier-border);
+  border-radius: 0;
+  margin: 0;
+  padding: 0 14px;
+  background: transparent;
+  box-shadow: none;
+  font: inherit;
+  font-size: var(--font-ui-small);
+  white-space: nowrap;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
 .github-tab-header .github-commit-group button.github-push-btn:hover:not(:disabled) {
-  background: var(--interactive-accent) !important;
-  color: var(--text-on-accent) !important;
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
 }
 
 .github-tab-header .github-commit-group button.github-push-btn:disabled {
-  opacity: 0.5 !important;
-  cursor: default !important;
+  opacity: 0.5;
+  cursor: default;
 }
 
 /* ── mode toggle (Editor / Viewer / Split) ── */
@@ -297,18 +297,18 @@
 }
 
 .github-tab-header .github-readme-mode-toggle .github-readme-mode-btn {
-  height: 100% !important;
-  border: none !important;
-  box-shadow: none !important;
-  background: transparent !important;
-  padding: 0 10px !important;
-  margin: 0 !important;
-  border-radius: calc(var(--input-radius) - 2px) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  color: var(--text-muted) !important;
-  cursor: pointer !important;
+  height: 100%;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  padding: 0 10px;
+  margin: 0;
+  border-radius: calc(var(--input-radius) - 2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  cursor: pointer;
 }
 
 .github-tab-header .github-readme-mode-btn svg {
@@ -318,13 +318,13 @@
 }
 
 .github-tab-header .github-readme-mode-btn:hover:not(.active):not(:disabled) {
-  background: var(--background-modifier-hover) !important;
-  color: var(--text-normal) !important;
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
 }
 
 .github-tab-header .github-readme-mode-btn.active {
-  background: var(--interactive-accent) !important;
-  color: var(--text-on-accent) !important;
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
 }
 
 .github-tab-header .github-readme-mode-btn:focus-visible {
@@ -333,26 +333,26 @@
 }
 
 .github-tab-header .github-readme-mode-btn:disabled {
-  opacity: 0.5 !important;
-  cursor: default !important;
+  opacity: 0.5;
+  cursor: default;
 }
 
 /* ── open-in-tab button ── */
 .github-tab-header .github-readme-open-btn {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  height: var(--input-height) !important;
-  width: var(--input-height) !important;
-  box-sizing: border-box !important;
-  border: 1px solid var(--background-modifier-border) !important;
-  border-radius: var(--input-radius) !important;
-  background: var(--background-primary) !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  box-shadow: none !important;
-  color: var(--text-muted) !important;
-  cursor: pointer !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--input-height);
+  width: var(--input-height);
+  box-sizing: border-box;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--input-radius);
+  background: var(--background-primary);
+  margin: 0;
+  padding: 0;
+  box-shadow: none;
+  color: var(--text-muted);
+  cursor: pointer;
 }
 
 .github-tab-header .github-readme-open-btn svg {
@@ -362,8 +362,8 @@
 }
 
 .github-tab-header .github-readme-open-btn:hover:not(:disabled) {
-  background: var(--background-modifier-hover) !important;
-  color: var(--text-normal) !important;
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
 }
 
 .github-tab-header .github-readme-open-btn:focus-visible {
@@ -372,8 +372,8 @@
 }
 
 .github-tab-header .github-readme-open-btn:disabled {
-  opacity: 0.5 !important;
-  cursor: default !important;
+  opacity: 0.5;
+  cursor: default;
 }
 
 
@@ -1151,8 +1151,8 @@
   width: 100%;
   height: 100%;
   flex: 1 1 auto;
-  border: none !important;
-  outline: none !important;
+  border: none;
+  outline: none;
 }
 
 .github-readme-cm-editor .cm-scroller {
@@ -1309,4 +1309,8 @@
 .github-profile-settings-icon {
   font-size: 14px;
   line-height: 1;
+}
+/* Token input width (replaces inline style to satisfy no-static-styles-assignment) */
+.github-readme-token-input {
+  width: 260px;
 }
