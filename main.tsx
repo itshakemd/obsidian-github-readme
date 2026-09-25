@@ -81,11 +81,55 @@ class GitHubReadmeSettingTab extends PluginSettingTab {
       {
         name: "GitHub Personal Access Token",
         desc: "Used to read/write README files via GitHub API. Stored locally in data.json.",
-        control: {
-          type: "text" as const,
-          key: "githubToken",
-          placeholder: "ghp_… or github_pat_…",
+        render: (setting: Setting) => {
+          let tokenInput: HTMLInputElement | null = null;
+
+          setting
+            .addText((text) => {
+              text
+                .setPlaceholder("ghp_… or github_pat_…")
+                .setValue(this.pluginInstance.settings.githubToken)
+                .onChange(async (value) => {
+                  this.pluginInstance.settings.githubToken = value.trim();
+                  await this.pluginInstance.saveSettings();
+                  this.pluginInstance.refreshViews();
+                });
+              text.inputEl.type = "password";
+              text.inputEl.addClass("github-readme-token-input");
+              tokenInput = text.inputEl;
+            })
+            .addExtraButton((button) => {
+              button
+                .setIcon("eye")
+                .setTooltip("Show token")
+                .onClick(() => {
+                  if (!tokenInput) return;
+                  const hidden = tokenInput.type === "password";
+                  tokenInput.type = hidden ? "text" : "password";
+                  button.setIcon(hidden ? "eye-off" : "eye");
+                  button.setTooltip(hidden ? "Hide token" : "Show token");
+                });
+            });
         },
+      },
+      {
+        name: "Clear token",
+        desc: "Remove the stored token.",
+        render: (setting: Setting) => {
+          setting.addButton((button) => {
+            button.setButtonText("Clear").setDestructive().onClick(async () => {
+              this.pluginInstance.settings.githubToken = "";
+              await this.pluginInstance.saveSettings();
+              this.pluginInstance.refreshViews();
+              this.update();
+              new Notice("Token cleared");
+            });
+          });
+        },
+      },
+      {
+        name: "Token permissions",
+        desc: "Create a token at github.com/settings/tokens (classic, scope: repo) or fine-grained with Contents: Read & write.",
       },
       {
         name: "Default view mode",
@@ -119,75 +163,6 @@ class GitHubReadmeSettingTab extends PluginSettingTab {
     }
     await this.pluginInstance.saveSettings();
     this.pluginInstance.refreshViews();
-  }
-
-  display(): void {
-    const { containerEl } = this;
-    containerEl.empty();
-    new Setting(containerEl).setName("GitHub README").setHeading();
-
-    let tokenInput: HTMLInputElement | null = null;
-
-    new Setting(containerEl)
-      .setName("GitHub Personal Access Token")
-      .setDesc("Used to read/write README files via GitHub API. Stored locally in data.json.")
-      .addText((text) => {
-        text
-          .setPlaceholder("ghp_… or github_pat_…")
-          .setValue(this.pluginInstance.settings.githubToken)
-          .onChange(async (value) => {
-            const trimmed = value.trim();
-            this.pluginInstance.settings.githubToken = trimmed;
-            await this.pluginInstance.saveSettings();
-            this.pluginInstance.refreshViews();
-          });
-        text.inputEl.type = "password";
-        text.inputEl.addClass("github-readme-token-input");
-        tokenInput = text.inputEl;
-      })
-      .addExtraButton((btn) => {
-        btn
-          .setIcon("eye")
-          .setTooltip("Show token")
-          .onClick(() => {
-            if (!tokenInput) return;
-            const hidden = tokenInput.type === "password";
-            tokenInput.type = hidden ? "text" : "password";
-            btn.setIcon(hidden ? "eye-off" : "eye");
-            btn.setTooltip(hidden ? "Hide token" : "Show token");
-          });
-      });
-
-    new Setting(containerEl)
-      .setName("Clear token")
-      .setDesc("Remove the stored token.")
-      .addButton((btn) => {
-        btn.setButtonText("Clear").setDestructive().onClick(async () => {
-          this.pluginInstance.settings.githubToken = "";
-          await this.pluginInstance.saveSettings();
-          this.pluginInstance.refreshViews();
-          this.display();
-          new Notice("Token cleared");
-        });
-      });
-
-    containerEl.createEl("p", { text: "Create a token at github.com/settings/tokens (classic, scope: repo) or fine-grained with Contents: Read & write.", cls: "setting-item-description" });
-
-    new Setting(containerEl)
-      .setName("Default view mode")
-      .setDesc("How READMEs open: editor only, rendered viewer only, or editor and viewer side by side.")
-      .addDropdown((dropdown) => {
-        dropdown
-          .addOption("editor", "Editor")
-          .addOption("viewer", "Viewer")
-          .addOption("split", "Split")
-          .setValue(this.pluginInstance.settings.defaultViewMode)
-          .onChange(async (value) => {
-            this.pluginInstance.settings.defaultViewMode = value as ViewMode;
-            await this.pluginInstance.saveSettings();
-            this.pluginInstance.refreshViews();
-          });
-      });
   }
 }
 
