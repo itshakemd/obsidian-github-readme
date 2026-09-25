@@ -1,7 +1,5 @@
 import { useEffect, useRef } from "react";
 
-declare function createEl(tag: string): HTMLElement;
-
 interface Props {
   source: string;
   renderMarkdown: (markdown: string, el: HTMLElement) => Promise<() => void>;
@@ -17,10 +15,11 @@ export default function MarkdownPreview({ source, renderMarkdown }: Props) {
     let cleanup: (() => void) | undefined;
 
     const timer = window.setTimeout(async () => {
-      const next = createEl("div");
+      const next = el.createDiv();
       const dispose = await renderMarkdown(source, next);
       if (cancelled) {
         dispose();
+        next.remove();
         return;
       }
       cleanup = dispose;
