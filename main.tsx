@@ -1,4 +1,4 @@
-import { Component, ItemView, MarkdownRenderer, MarkdownView, normalizePath, Notice, Plugin, PluginSettingTab, requestUrl, Setting, TFile, WorkspaceLeaf } from "obsidian";
+import { Component, ItemView, MarkdownRenderer, MarkdownView, normalizePath, Notice, Plugin, PluginSettingTab, requestUrl, Setting, SettingGroup, TFile, WorkspaceLeaf } from "obsidian";
 import { createRoot } from "react-dom/client";
 import type { Root } from "react-dom/client";
 import App from "./src/App";
@@ -81,7 +81,7 @@ class GitHubReadmeSettingTab extends PluginSettingTab {
       {
         name: "GitHub Personal Access Token",
         desc: "Used to read/write README files via GitHub API. Stored locally in data.json.",
-        render: (setting: Setting) => {
+        render: (setting: Setting, _group: SettingGroup) => {
           let tokenInput: HTMLInputElement | null = null;
 
           setting
@@ -115,7 +115,7 @@ class GitHubReadmeSettingTab extends PluginSettingTab {
       {
         name: "Clear token",
         desc: "Remove the stored token.",
-        render: (setting: Setting) => {
+        render: (setting: Setting, _group: SettingGroup) => {
           setting.addButton((button) => {
             button.setButtonText("Clear").setDestructive().onClick(async () => {
               this.pluginInstance.settings.githubToken = "";
