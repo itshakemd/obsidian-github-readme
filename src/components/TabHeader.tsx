@@ -52,6 +52,8 @@ interface Props {
   isWatching: boolean;
   handleOpenInObsidian: () => Promise<void>;
   repoFullName: string | null;
+  sidebarOpen?: boolean;
+  onToggleSidebar?: () => void;
 }
 
 export default function TabHeader({
@@ -67,14 +69,41 @@ export default function TabHeader({
   isWatching,
   handleOpenInObsidian,
   repoFullName,
+  sidebarOpen,
+  onToggleSidebar,
 }: Props) {
   return (
     <div className="github-tab-header">
+      {onToggleSidebar && (
+        <button
+          type="button"
+          className="github-readme-open-btn"
+          aria-label={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+          title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+          onClick={onToggleSidebar}
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            {sidebarOpen ? (
+              <>
+                <rect width="18" height="18" x="3" y="3" rx="2" />
+                <path d="M9 3v18" />
+                <path d="m16 15-3-3 3-3" />
+              </>
+            ) : (
+              <>
+                <rect width="18" height="18" x="3" y="3" rx="2" />
+                <path d="M9 3v18" />
+                <path d="m14 9 3 3-3 3" />
+              </>
+            )}
+          </svg>
+        </button>
+      )}
       <div className="github-commit-group">
         <input
           className="github-commit-input"
           type="text"
-          placeholder="Commit message — e.g., Update README"
+          placeholder="Commit message â€” e.g., Update README"
           value={commitMsg}
           onChange={(e) => setCommitMsg(e.target.value)}
           aria-label="Commit message"
@@ -86,7 +115,7 @@ export default function TabHeader({
           type="button"
           title={repoFullName ? `Push to ${repoFullName}` : "Select a repo first"}
         >
-          {readmeSaving ? "Pushing…" : "Push commit"}
+          {readmeSaving ? "Pushingâ€¦" : "Push commit"}
         </button>
       </div>
       <div className="github-readme-mode-toggle" role="group" aria-label="README view mode">
@@ -109,7 +138,7 @@ export default function TabHeader({
         type="button"
         className="github-readme-open-btn"
         aria-label={isWatching ? "Syncing with Obsidian tab" : "Open in Obsidian tab"}
-        title={isWatching ? "Live-syncing with Obsidian tab — edits there will appear here" : "Open in Obsidian tab"}
+        title={isWatching ? "Live-syncing with Obsidian tab â€” edits there will appear here" : "Open in Obsidian tab"}
         data-tooltip-position="bottom"
         onClick={() => void handleOpenInObsidian()}
         disabled={!selectedRepo || !hasReadme}
