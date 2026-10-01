@@ -31,6 +31,10 @@ function copyManifest() {
 export default defineConfig({
   plugins: [react(), copyManifest()],
 
+  define: {
+    "process.env.NODE_ENV": JSON.stringify("production"),
+  },
+
   build: {
     lib: {
       entry: "main.tsx",
