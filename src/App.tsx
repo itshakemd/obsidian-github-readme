@@ -34,6 +34,7 @@ export default function App({
   renderMarkdown,
 }: AppProps) {
   const [hasToken, setHasToken] = useState(() => getToken().length > 0);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- sync hasToken with external plugin settings on mount / token getter change
@@ -56,9 +57,6 @@ export default function App({
     viewMode,
     setViewMode,
     viewerRef,
-    editorScrollerRef,
-    syncScroll,
-    handleViewerScroll,
     handleSelectRepo,
     handlePushCommit,
     handleOpenInObsidian,
@@ -92,6 +90,8 @@ export default function App({
           isWatching={isWatching}
           handleOpenInObsidian={handleOpenInObsidian}
           repoFullName={selectedRepo?.full_name ?? null}
+          sidebarOpen={sidebarOpen}
+          onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
         />
 
         <div className={`github-readme-root ${selectedRepo ? "fill" : ""}`}>
@@ -104,10 +104,7 @@ export default function App({
             setReadmeDraft={setReadmeDraft}
             viewMode={viewMode}
             editorKey={editorKey}
-            syncScroll={syncScroll}
-            editorScrollerRef={editorScrollerRef}
             viewerRef={viewerRef}
-            handleViewerScroll={handleViewerScroll}
             renderMarkdown={renderMarkdown}
             readmeSaved={readmeSaved}
           />
