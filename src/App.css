@@ -192,6 +192,7 @@
 }
 
 .github-readme-sidebar {
+  transition: width 0.25s ease, opacity 0.25s ease, min-width 0.25s ease;
   width: 300px;
   min-width: 260px;
   max-width: 360px;
@@ -225,7 +226,7 @@
   z-index: 1;
 }
 
-/* ── commit message + push button ── */
+/* â”€â”€ commit message + push button â”€â”€ */
 .github-tab-header .github-commit-group {
   display: flex;
   align-items: center;
@@ -283,7 +284,7 @@
   cursor: default;
 }
 
-/* ── mode toggle (Editor / Viewer / Split) ── */
+/* â”€â”€ mode toggle (Editor / Viewer / Split) â”€â”€ */
 .github-tab-header .github-readme-mode-toggle {
   display: flex;
   align-items: center;
@@ -337,7 +338,7 @@
   cursor: default;
 }
 
-/* ── open-in-tab button ── */
+/* â”€â”€ open-in-tab button â”€â”€ */
 .github-tab-header .github-readme-open-btn {
   display: flex;
   align-items: center;
