@@ -64,7 +64,7 @@ export default function App({
 
   return (
     <div className="github-readme-layout">
-      <aside className="github-readme-sidebar">
+      <aside className={`github-readme-sidebar ${sidebarOpen ? "" : "collapsed"}`}>
         <ReposSidebar
           getToken={getToken}
           listRepos={listRepos}
