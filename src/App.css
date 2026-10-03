@@ -1123,7 +1123,7 @@
 }
 
 .github-readme-content.mode-split > .github-readme-editor-wrap {
-  border-right: 1px solid var(--background-modifier-border);
+  /* border handled by resizer */
 }
 
 .github-readme-editor-wrap {
@@ -1340,5 +1340,30 @@
 .github-sidebar-toggle-btn:hover {
   background: var(--background-modifier-hover);
   color: var(--text-normal);
+}
+.github-readme-resizer-wrap {
+  width: 1px;
+  background: var(--background-modifier-border);
+  position: relative;
+  flex: 0 0 1px;
+  cursor: col-resize;
+  z-index: 10;
+}
+
+.github-readme-resizer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -4px;
+  right: -4px;
+  cursor: col-resize;
+  z-index: 11;
+  transition: background 0.2s;
+}
+
+.github-readme-resizer:hover,
+.github-readme-resizer:active {
+  background: var(--interactive-accent);
+  opacity: 0.5;
 }
 
