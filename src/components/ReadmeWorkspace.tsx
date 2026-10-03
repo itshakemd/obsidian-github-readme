@@ -11,10 +11,7 @@ interface Props {
   setReadmeDraft: (content: string) => void;
   viewMode: ViewMode;
   editorKey: number;
-  syncScroll: (from: "editor" | "viewer", ratio: number) => void;
-  editorScrollerRef: React.RefObject<HTMLElement | null>;
   viewerRef: React.RefObject<HTMLDivElement | null>;
-  handleViewerScroll: (e: React.UIEvent<HTMLDivElement>) => void;
   renderMarkdown: (markdown: string, el: HTMLElement) => Promise<() => void>;
   readmeSaved: boolean;
 }
@@ -28,10 +25,7 @@ export default function ReadmeWorkspace({
   setReadmeDraft,
   viewMode,
   editorKey,
-  syncScroll,
-  editorScrollerRef,
   viewerRef,
-  handleViewerScroll,
   renderMarkdown,
   readmeSaved,
 }: Props) {
@@ -55,13 +49,16 @@ export default function ReadmeWorkspace({
                   key={editorKey}
                   value={readmeDraft}
                   onChange={setReadmeDraft}
-                  onScroll={(ratio) => syncScroll("editor", ratio)}
-                  scrollerRef={editorScrollerRef}
                 />
               </div>
             )}
+            {viewMode === "split" && (
+              <div className="github-readme-resizer-wrap">
+                <div className="github-readme-resizer" />
+              </div>
+            )}
             {(viewMode === "viewer" || viewMode === "split") && (
-              <div className="github-readme-viewer" ref={viewerRef} onScroll={handleViewerScroll}>
+              <div className="github-readme-viewer" ref={viewerRef}>
                 {readmeDraft ? (
                   <MarkdownPreview source={readmeDraft} renderMarkdown={renderMarkdown} />
                 ) : (
