@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from "react";
 import CodeMirrorEditor from "./CodeMirrorEditor";
 import MarkdownPreview from "./MarkdownPreview";
 import type { ViewMode, ReadmeData, RepoInfo } from "../types";
@@ -29,6 +30,10 @@ export default function ReadmeWorkspace({
   renderMarkdown,
   readmeSaved,
 }: Props) {
+  const [editorWidth, setEditorWidth] = useState(50);
+  const [isDragging, setIsDragging] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
   if (!selectedRepo) return null;
 
   return (
@@ -42,9 +47,12 @@ export default function ReadmeWorkspace({
 
       {!readmeLoading && readme && (
         <>
-          <div className={`github-readme-content mode-${viewMode}`}>
+          <div className={`github-readme-content mode-${viewMode}`} ref={containerRef}>
             {(viewMode === "editor" || viewMode === "split") && (
-              <div className="github-readme-editor-wrap">
+              <div
+                className="github-readme-editor-wrap"
+                style={viewMode === "split" ? { flex: `0 0 ${editorWidth}%`, borderRight: "none" } : undefined}
+              >
                 <CodeMirrorEditor
                   key={editorKey}
                   value={readmeDraft}
