@@ -34,6 +34,23 @@ export default function ReadmeWorkspace({
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (!isDragging) return;
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!containerRef.current) return;
+      const { left, width } = containerRef.current.getBoundingClientRect();
+      const newFlex = ((e.clientX - left) / width) * 100;
+      setEditorWidth(Math.max(10, Math.min(90, newFlex)));
+    };
+    const handleMouseUp = () => setIsDragging(false);
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging]);
+
   if (!selectedRepo) return null;
 
   return (
@@ -62,7 +79,7 @@ export default function ReadmeWorkspace({
             )}
             {viewMode === "split" && (
               <div className="github-readme-resizer-wrap">
-                <div className="github-readme-resizer" />
+                <div className="github-readme-resizer" onMouseDown={() => setIsDragging(true)} />
               </div>
             )}
             {(viewMode === "viewer" || viewMode === "split") && (
