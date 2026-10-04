@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { EditorView, keymap, lineNumbers, highlightActiveLine, highlightActiveLineGutter } from "@codemirror/view";
-import { EditorState } from "@codemirror/state";
+import { EditorState, Compartment } from "@codemirror/state";
 import { defaultKeymap, history, historyKeymap, indentWithTab } from "@codemirror/commands";
 import { markdown } from "@codemirror/lang-markdown";
 import { HighlightStyle, syntaxHighlighting } from "@codemirror/language";
@@ -39,6 +39,8 @@ export default function CodeMirrorEditor({ value, onChange, onScroll, scrollerRe
   // eslint-disable-next-line react-hooks/refs -- keep callback ref up to date without triggering re-render
   onScrollRef.current = onScroll;
 
+  const lineNumbersCompartment = useRef(new Compartment());
+
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -50,9 +52,8 @@ export default function CodeMirrorEditor({ value, onChange, onScroll, scrollerRe
           markdown(),
           syntaxHighlighting(obsidianHighlightStyle),
           keymap.of([...defaultKeymap, ...historyKeymap, indentWithTab]),
-          lineNumbers(),
+          lineNumbersCompartment.current.of([lineNumbers(), highlightActiveLineGutter()]),
           highlightActiveLine(),
-          highlightActiveLineGutter(),
           EditorView.lineWrapping,
           EditorView.updateListener.of((update) => {
             if (update.docChanged) {
