@@ -28,43 +28,6 @@ export function useReadmeEditor(
   }, [defaultViewMode]);
 
   const viewerRef = useRef<HTMLDivElement>(null);
-  const editorScrollerRef = useRef<HTMLElement | null>(null);
-  const ignoreScrollFrom = useRef<"editor" | "viewer" | null>(null);
-
-  useEffect(() => {
-    ignoreScrollFrom.current = null;
-  }, [viewMode, selectedRepo]);
-
-  const syncScroll = useCallback((from: "editor" | "viewer", ratio: number) => {
-    if (viewMode !== "split") return;
-    if (ignoreScrollFrom.current === from) {
-      ignoreScrollFrom.current = null;
-      return;
-    }
-    if (from === "editor") {
-      const dst = viewerRef.current;
-      if (!dst) return;
-      const max = dst.scrollHeight - dst.clientHeight;
-      if (max <= 0) return;
-      const before = dst.scrollTop;
-      dst.scrollTop = ratio * max;
-      if (dst.scrollTop !== before) ignoreScrollFrom.current = "viewer";
-    } else {
-      const dst = editorScrollerRef.current;
-      if (!dst) return;
-      const max = dst.scrollHeight - dst.clientHeight;
-      if (max <= 0) return;
-      const before = dst.scrollTop;
-      dst.scrollTop = ratio * max;
-      if (dst.scrollTop !== before) ignoreScrollFrom.current = "editor";
-    }
-  }, [viewMode]);
-
-  const handleViewerScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
-    const el = e.currentTarget;
-    const max = el.scrollHeight - el.clientHeight;
-    if (max > 0) syncScroll("viewer", el.scrollTop / max);
-  }, [syncScroll]);
 
   const handleSelectRepo = useCallback(async (repo: RepoInfo) => {
     watcherUnsubRef.current?.();
@@ -145,9 +108,6 @@ export function useReadmeEditor(
     viewMode,
     setViewMode,
     viewerRef,
-    editorScrollerRef,
-    syncScroll,
-    handleViewerScroll,
     handleSelectRepo,
     handlePushCommit,
     handleOpenInObsidian
