@@ -18,6 +18,7 @@ interface AppProps {
   fetchProfile: () => Promise<UserProfile>;
   openSettings: () => void;
   defaultViewMode: ViewMode;
+  showLineNumbers: boolean;
   renderMarkdown: (markdown: string, el: HTMLElement) => Promise<() => void>;
 }
 
@@ -31,6 +32,7 @@ export default function App({
   openReadme,
   watchFile,
   defaultViewMode,
+  showLineNumbers,
   renderMarkdown,
 }: AppProps) {
   const [hasToken, setHasToken] = useState(() => getToken().length > 0);
@@ -105,6 +107,7 @@ export default function App({
             viewMode={viewMode}
             editorKey={editorKey}
             viewerRef={viewerRef}
+            showLineNumbers={showLineNumbers}
             renderMarkdown={renderMarkdown}
             readmeSaved={readmeSaved}
           />
