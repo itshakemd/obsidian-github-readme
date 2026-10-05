@@ -160,6 +160,20 @@ class GitHubReadmeSettingTab extends PluginSettingTab {
           });
         },
       },
+      {
+        name: "",
+        desc: "",
+        render: (_setting: Setting, _group: SettingGroup) => {
+          const footer = _setting.settingEl;
+          footer.style.borderTop = "1px solid var(--background-modifier-border)";
+          footer.style.marginTop = "12px";
+          footer.style.paddingTop = "12px";
+          footer.style.justifyContent = "center";
+          footer.style.fontSize = "12px";
+          footer.style.color = "var(--text-muted)";
+          footer.innerHTML = 'Built by&nbsp;<a href="https://itshd.net" target="_blank" rel="noopener noreferrer" style="color:var(--text-accent);text-decoration:none;">itshd.net</a>';
+        },
+      },
     ];
   }
 
