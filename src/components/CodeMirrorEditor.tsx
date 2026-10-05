@@ -26,10 +26,11 @@ interface Props {
   onChange: (v: string) => void;
   onScroll?: (ratio: number) => void;
   scrollerRef?: React.RefObject<HTMLElement | null>;
+  showLineNumbers?: boolean;
   className?: string;
 }
 
-export default function CodeMirrorEditor({ value, onChange, onScroll, scrollerRef, className }: Props) {
+export default function CodeMirrorEditor({ value, onChange, onScroll, scrollerRef, showLineNumbers = true, className }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
   const onChangeRef = useRef(onChange);
@@ -52,7 +53,7 @@ export default function CodeMirrorEditor({ value, onChange, onScroll, scrollerRe
           markdown(),
           syntaxHighlighting(obsidianHighlightStyle),
           keymap.of([...defaultKeymap, ...historyKeymap, indentWithTab]),
-          lineNumbersCompartment.current.of([lineNumbers(), highlightActiveLineGutter()]),
+          lineNumbersCompartment.current.of(showLineNumbers ? [lineNumbers(), highlightActiveLineGutter()] : []),
           highlightActiveLine(),
           EditorView.lineWrapping,
           EditorView.updateListener.of((update) => {
@@ -117,6 +118,14 @@ export default function CodeMirrorEditor({ value, onChange, onScroll, scrollerRe
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- view initialization should only run on mount (remount is handled by editorKey)
   }, []);
+
+  useEffect(() => {
+    if (viewRef.current) {
+      viewRef.current.dispatch({
+        effects: lineNumbersCompartment.current.reconfigure(showLineNumbers ? [lineNumbers(), highlightActiveLineGutter()] : [])
+      });
+    }
+  }, [showLineNumbers]);
 
   return <div ref={containerRef} className={`github-readme-cm-editor${className ? ` ${className}` : ""}`} />;
 }
