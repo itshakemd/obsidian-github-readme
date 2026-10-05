@@ -57,6 +57,7 @@ class GitHubView extends ItemView {
         fetchProfile={() => this.plugin.fetchProfile()}
         openSettings={() => this.plugin.openSettings()}
         defaultViewMode={this.plugin.settings.defaultViewMode}
+        showLineNumbers={this.plugin.settings.showLineNumbers}
         renderMarkdown={this.renderMarkdown}
       />
     );
@@ -142,6 +143,21 @@ class GitHubReadmeSettingTab extends PluginSettingTab {
             viewer: "Viewer",
             split: "Split",
           },
+        },
+      },
+      {
+        name: "Show line numbers",
+        desc: "Display line numbers in the editor gutter.",
+        render: (setting: Setting, _group: SettingGroup) => {
+          setting.addToggle((toggle) => {
+            toggle
+              .setValue(this.pluginInstance.settings.showLineNumbers)
+              .onChange(async (value) => {
+                this.pluginInstance.settings.showLineNumbers = value;
+                await this.pluginInstance.saveSettings();
+                this.pluginInstance.refreshViews();
+              });
+          });
         },
       },
     ];
