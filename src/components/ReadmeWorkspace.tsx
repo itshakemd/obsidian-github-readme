@@ -47,11 +47,11 @@ export default function ReadmeWorkspace({
     const handleMouseUp = () => setIsDragging(false);
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
-    document.body.style.userSelect = "none";
+    document.body.classList.add("github-readme-dragging");
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
-      document.body.style.userSelect = "";
+      document.body.classList.remove("github-readme-dragging");
     };
   }, [isDragging]);
 
@@ -72,7 +72,7 @@ export default function ReadmeWorkspace({
             {(viewMode === "editor" || viewMode === "split") && (
               <div
                 className="github-readme-editor-wrap"
-                style={viewMode === "split" ? { flex: `0 0 ${editorWidth}%`, borderRight: "none" } : undefined}
+                style={viewMode === "split" ? { "--editor-width": `${editorWidth}%` } as React.CSSProperties : undefined}
               >
                 <CodeMirrorEditor
                   key={editorKey}

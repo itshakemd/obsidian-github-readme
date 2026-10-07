@@ -1382,3 +1382,12 @@
 .github-settings-built-by a:hover {
   text-decoration: underline;
 }
+
+body.github-readme-dragging {
+  user-select: none;
+}
+
+.github-readme-content.mode-split > .github-readme-editor-wrap {
+  flex: 0 0 var(--editor-width, 50%);
+  border-right: none;
+}

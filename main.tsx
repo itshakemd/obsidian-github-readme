@@ -1,4 +1,4 @@
-import { Component, ItemView, MarkdownRenderer, MarkdownView, normalizePath, Notice, Plugin, PluginSettingTab, requestUrl, Setting, SettingGroup, TFile, WorkspaceLeaf } from "obsidian";
+import { Component, ItemView, MarkdownRenderer, MarkdownView, normalizePath, Notice, Plugin, PluginSettingTab, requestUrl, Setting, TFile, WorkspaceLeaf } from "obsidian";
 import { createRoot } from "react-dom/client";
 import type { Root } from "react-dom/client";
 import App from "./src/App";
@@ -82,7 +82,7 @@ class GitHubReadmeSettingTab extends PluginSettingTab {
       {
         name: "GitHub Personal Access Token",
         desc: "Used to read/write README files via GitHub API. Stored locally in data.json.",
-        render: (setting: Setting, _group: SettingGroup) => {
+        render: (setting: Setting) => {
           let tokenInput: HTMLInputElement | null = null;
 
           setting
@@ -116,7 +116,7 @@ class GitHubReadmeSettingTab extends PluginSettingTab {
       {
         name: "Clear token",
         desc: "Remove the stored token.",
-        render: (setting: Setting, _group: SettingGroup) => {
+        render: (setting: Setting) => {
           setting.addButton((button) => {
             button.setButtonText("Clear").setDestructive().onClick(async () => {
               this.pluginInstance.settings.githubToken = "";
@@ -148,7 +148,7 @@ class GitHubReadmeSettingTab extends PluginSettingTab {
       {
         name: "Show line numbers",
         desc: "Display line numbers in the editor gutter.",
-        render: (setting: Setting, _group: SettingGroup) => {
+        render: (setting: Setting) => {
           setting.addToggle((toggle) => {
             toggle
               .setValue(this.pluginInstance.settings.showLineNumbers)
@@ -163,15 +163,19 @@ class GitHubReadmeSettingTab extends PluginSettingTab {
       {
         name: "",
         desc: "",
-        render: (_setting: Setting, _group: SettingGroup) => {
+        render: (_setting: Setting) => {
           const footer = _setting.settingEl;
-          footer.style.borderTop = "1px solid var(--background-modifier-border)";
-          footer.style.marginTop = "12px";
-          footer.style.paddingTop = "12px";
-          footer.style.justifyContent = "center";
-          footer.style.fontSize = "12px";
-          footer.style.color = "var(--text-muted)";
-          footer.innerHTML = 'Built by&nbsp;<a href="https://itshd.net" target="_blank" rel="noopener noreferrer" style="color:var(--text-accent);text-decoration:none;">itshd.net</a>';
+          footer.empty();
+          footer.addClass("github-settings-built-by");
+          footer.createSpan({ text: "Built by\u00A0" });
+          footer.createEl("a", {
+            text: "itshd.net",
+            href: "https://itshd.net",
+            attr: {
+              target: "_blank",
+              rel: "noopener noreferrer"
+            }
+          });
         },
       },
     ];
