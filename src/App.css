@@ -1315,9 +1315,9 @@
 .github-readme-token-input {
   width: 260px;
 }
-.github-readme-sidebar.collapsed {
-  width: 0 !important;
-  min-width: 0 !important;
+.github-readme-layout .github-readme-sidebar.collapsed {
+  width: 0;
+  min-width: 0;
   opacity: 0;
   overflow: hidden;
   pointer-events: none;
