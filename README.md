@@ -26,7 +26,11 @@ It is built for developers, technical writers, and creators who want documentati
 - Live rendered Markdown preview for quick review
 - One-click save back to GitHub with custom commit message
 - Local vault sync so the README can be opened and updated inside your notes
+- **Collapsible sidebar** to maximize workspace when you need more room
+- **Draggable split-view divider** to resize the editor and preview to your liking
+- **Toggleable line numbers** in settings for a cleaner or more structured editor
 - Clean, focused UI designed for a documentation-first experience
+- Works on both desktop and mobile Obsidian
 
 ## The workflow
 
@@ -38,6 +42,14 @@ It is built for developers, technical writers, and creators who want documentati
 6. Keep a synced copy in your vault for local context and reference.
 
 This turns README editing into a smooth part of your note-taking and documentation process rather than a separate task.
+
+## Settings
+
+| Setting | Description |
+|---|---|
+| GitHub Personal Access Token | Used to authenticate with the GitHub API |
+| Default view mode | Choose between Editor, Viewer, or Split on open |
+| Show line numbers | Toggle line numbers in the Markdown editor |
 
 ## Built for
 
@@ -64,12 +76,16 @@ Review the rendered README before publishing it back to GitHub.
 
 ### Split view
 
-Edit Markdown and compare the rendered result side by side.
+Edit Markdown and compare the rendered result side by side. Drag the divider to adjust the panel sizes.
 
-![README split view in Obsidian](https://community.obsidian.md/api/images/11958)
+![README split view with drag handle in Obsidian](https://community.obsidian.md/api/images/13339)
 
 ## Why it stands out
 
 This is not just a GitHub viewer. It is a documentation workflow tool for Obsidian users who want to write, review, and publish README content without breaking concentration.
 
 It bridges the gap between note-taking and GitHub-backed project documentation in a way that feels natural, fast, and focused.
+
+---
+
+Built by [itshd.net](https://itshd.net)
