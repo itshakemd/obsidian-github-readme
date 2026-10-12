@@ -4,6 +4,7 @@ import { applyFormat, formatActions } from "./selectionFormatting";
 export const selectionToolbar = ViewPlugin.fromClass(class {
   readonly view: EditorView;
   readonly toolbar: HTMLDivElement;
+  readonly handleScroll: () => void;
 
   constructor(view: EditorView) {
     this.view = view;
@@ -27,9 +28,39 @@ export const selectionToolbar = ViewPlugin.fromClass(class {
     }
 
     this.view.dom.ownerDocument.body.appendChild(this.toolbar);
+    this.handleScroll = () => this.position();
+    this.view.scrollDOM.addEventListener("scroll", this.handleScroll);
+    window.addEventListener("resize", this.handleScroll);
+    this.position();
+  }
+
+  position(): void {
+    const selection = this.view.state.selection.main;
+    if (selection.empty) {
+      this.toolbar.classList.remove("visible");
+      return;
+    }
+
+    const start = this.view.coordsAtPos(selection.from);
+    const end = this.view.coordsAtPos(selection.to);
+    if (!start || !end) {
+      this.toolbar.classList.remove("visible");
+      return;
+    }
+
+    this.toolbar.classList.add("visible");
+    const bounds = this.toolbar.getBoundingClientRect();
+    const center = (start.left + end.right) / 2;
+    const left = Math.max(8, Math.min(window.innerWidth - bounds.width - 8, center - bounds.width / 2));
+    const above = Math.min(start.top, end.top) - bounds.height - 8;
+    const top = above >= 8 ? above : Math.max(start.bottom, end.bottom) + 8;
+    this.toolbar.style.left = `${left}px`;
+    this.toolbar.style.top = `${top}px`;
   }
 
   destroy(): void {
+    this.view.scrollDOM.removeEventListener("scroll", this.handleScroll);
+    window.removeEventListener("resize", this.handleScroll);
     this.toolbar.remove();
   }
 });
