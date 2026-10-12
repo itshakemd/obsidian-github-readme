@@ -5,6 +5,7 @@ export const selectionToolbar = ViewPlugin.fromClass(class {
   readonly view: EditorView;
   readonly toolbar: HTMLDivElement;
   readonly handleScroll: () => void;
+  readonly handleSelection: () => void;
 
   constructor(view: EditorView) {
     this.view = view;
@@ -29,9 +30,18 @@ export const selectionToolbar = ViewPlugin.fromClass(class {
 
     this.view.dom.ownerDocument.body.appendChild(this.toolbar);
     this.handleScroll = () => this.position();
+    this.handleSelection = () => {
+      this.view.dom.ownerDocument.defaultView?.requestAnimationFrame(() => this.position());
+    };
     this.view.scrollDOM.addEventListener("scroll", this.handleScroll);
+    this.view.dom.addEventListener("mouseup", this.handleSelection);
+    this.view.dom.addEventListener("keyup", this.handleSelection);
     window.addEventListener("resize", this.handleScroll);
-    this.position();
+    this.handleSelection();
+  }
+
+  update(): void {
+    this.handleSelection();
   }
 
   position(): void {
@@ -60,6 +70,8 @@ export const selectionToolbar = ViewPlugin.fromClass(class {
 
   destroy(): void {
     this.view.scrollDOM.removeEventListener("scroll", this.handleScroll);
+    this.view.dom.removeEventListener("mouseup", this.handleSelection);
+    this.view.dom.removeEventListener("keyup", this.handleSelection);
     window.removeEventListener("resize", this.handleScroll);
     this.toolbar.remove();
   }
