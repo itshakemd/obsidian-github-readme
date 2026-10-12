@@ -40,6 +40,18 @@ class GitHubView extends ItemView {
     return () => component.unload();
   };
 
+  private getToken = () => this.plugin.settings.githubToken;
+  private saveToken = (token: string) => this.plugin.saveToken(token);
+  private listRepos = () => this.plugin.listRepos();
+  private fetchReadme = (fullName: string) => this.plugin.fetchReadme(fullName);
+  private saveReadme = (fullName: string, content: string, sha: string | null, message?: string) =>
+    this.plugin.saveReadme(fullName, content, sha, message);
+  private openReadme = (fullName: string, content: string) => this.plugin.openReadme(fullName, content);
+  private watchFile = (vaultPath: string, onChange: (content: string) => void) =>
+    this.plugin.watchFile(vaultPath, onChange);
+  private fetchProfile = () => this.plugin.fetchProfile();
+  private openSettings = () => this.plugin.openSettings();
+
   renderApp(): void {
     const container = this.containerEl.children[1] as HTMLElement;
     if (!this.root) {
@@ -47,15 +59,15 @@ class GitHubView extends ItemView {
     }
     this.root.render(
       <App
-        getToken={() => this.plugin.settings.githubToken}
-        saveToken={(token) => this.plugin.saveToken(token)}
-        listRepos={() => this.plugin.listRepos()}
-        fetchReadme={(fullName) => this.plugin.fetchReadme(fullName)}
-        saveReadme={(fullName, content, sha, message) => this.plugin.saveReadme(fullName, content, sha, message)}
-        openReadme={(fullName, content) => this.plugin.openReadme(fullName, content)}
-        watchFile={(vaultPath, onChange) => this.plugin.watchFile(vaultPath, onChange)}
-        fetchProfile={() => this.plugin.fetchProfile()}
-        openSettings={() => this.plugin.openSettings()}
+        getToken={this.getToken}
+        saveToken={this.saveToken}
+        listRepos={this.listRepos}
+        fetchReadme={this.fetchReadme}
+        saveReadme={this.saveReadme}
+        openReadme={this.openReadme}
+        watchFile={this.watchFile}
+        fetchProfile={this.fetchProfile}
+        openSettings={this.openSettings}
         defaultViewMode={this.plugin.settings.defaultViewMode}
         showLineNumbers={this.plugin.settings.showLineNumbers}
         inlineSuggestions={this.plugin.settings.inlineSuggestions}
