@@ -1152,6 +1152,28 @@
   white-space: pre;
 }
 
+.cm-selection-toolbar {
+  position: fixed;
+  z-index: 10000;
+  display: flex;
+  gap: 2px;
+  padding: 4px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s, 6px);
+  background: var(--background-primary);
+  box-shadow: var(--shadow-s, 0 4px 12px rgba(0, 0, 0, 0.22));
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(3px);
+  transition: opacity 100ms ease, transform 100ms ease;
+}
+
+.cm-selection-toolbar.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
 .github-readme-viewer {
   border-top: 1px solid var(--background-modifier-border);
   border-bottom: 1px solid var(--background-modifier-border);
