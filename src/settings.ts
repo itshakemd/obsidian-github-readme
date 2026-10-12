@@ -6,10 +6,12 @@ export interface GitHubReadmeSettings {
   githubToken: string;
   defaultViewMode: ViewMode;
   showLineNumbers: boolean;
+  inlineSuggestions: boolean;
 }
 
 export const DEFAULT_SETTINGS: GitHubReadmeSettings = {
   githubToken: "",
   defaultViewMode: "editor",
   showLineNumbers: true,
+  inlineSuggestions: true,
 };

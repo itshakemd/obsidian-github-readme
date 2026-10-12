@@ -58,6 +58,7 @@ class GitHubView extends ItemView {
         openSettings={() => this.plugin.openSettings()}
         defaultViewMode={this.plugin.settings.defaultViewMode}
         showLineNumbers={this.plugin.settings.showLineNumbers}
+        inlineSuggestions={this.plugin.settings.inlineSuggestions}
         renderMarkdown={this.renderMarkdown}
       />
     );
@@ -154,6 +155,21 @@ class GitHubReadmeSettingTab extends PluginSettingTab {
               .setValue(this.pluginInstance.settings.showLineNumbers)
               .onChange(async (value) => {
                 this.pluginInstance.settings.showLineNumbers = value;
+                await this.pluginInstance.saveSettings();
+                this.pluginInstance.refreshViews();
+              });
+          });
+        },
+      },
+      {
+        name: "Inline suggestions",
+        desc: "Show English word completions as faint text, prioritizing words from the current document. Press Tab to accept or Escape to dismiss.",
+        render: (setting: Setting) => {
+          setting.addToggle((toggle) => {
+            toggle
+              .setValue(this.pluginInstance.settings.inlineSuggestions)
+              .onChange(async (value) => {
+                this.pluginInstance.settings.inlineSuggestions = value;
                 await this.pluginInstance.saveSettings();
                 this.pluginInstance.refreshViews();
               });
@@ -265,7 +281,6 @@ export default class GitHubReadmePlugin extends Plugin {
           const j = JSON.parse(body) as { message?: string };
           if (j.message) msg = j.message;
         } catch {
-          // ignore JSON parse failure, use status message
         }
         throw new Error(msg);
       }
@@ -296,7 +311,6 @@ export default class GitHubReadmePlugin extends Plugin {
         const j = JSON.parse(body) as { message?: string };
         if (j.message) msg = j.message;
       } catch {
-        // ignore JSON parse failure
       }
       if (res.status === 404) throw new Error("No README found for this repository");
       throw new Error(msg);
@@ -328,7 +342,6 @@ export default class GitHubReadmePlugin extends Plugin {
         const j = JSON.parse(body) as { message?: string };
         if (j.message) msg = j.message;
       } catch {
-        // ignore JSON parse failure
       }
       throw new Error(msg);
     }
@@ -342,7 +355,6 @@ export default class GitHubReadmePlugin extends Plugin {
       setting.openTabById(this.manifest.id);
     } catch {
       try { setting.open(); } catch {
-        // ignore: setting modal may not be available
       }
     }
   }
@@ -361,7 +373,6 @@ export default class GitHubReadmePlugin extends Plugin {
         const info = await this.fetchReadme(fullName);
         path = info.path;
       } catch {
-        // ignore: fallback to default README.md path
       }
     }
 
@@ -387,7 +398,6 @@ export default class GitHubReadmePlugin extends Plugin {
         const j = JSON.parse(body) as { message?: string };
         if (j.message) msg = j.message;
       } catch {
-        // ignore JSON parse failure
       }
       throw new Error(msg);
     }
@@ -407,7 +417,6 @@ export default class GitHubReadmePlugin extends Plugin {
           try {
             await this.app.vault.createFolder(cur);
           } catch {
-            // ignore: folder may already exist
           }
         }
       }
@@ -437,7 +446,6 @@ export default class GitHubReadmePlugin extends Plugin {
           const content = await this.app.vault.read(file);
           onChange(content);
         } catch {
-          // ignore: file may have been deleted
         }
       }
     });
