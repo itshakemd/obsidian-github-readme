@@ -7,6 +7,7 @@ export interface GitHubReadmeSettings {
   defaultViewMode: ViewMode;
   showLineNumbers: boolean;
   inlineSuggestions: boolean;
+  selectionToolbar: boolean;
 }
 
 export const DEFAULT_SETTINGS: GitHubReadmeSettings = {
@@ -14,4 +15,5 @@ export const DEFAULT_SETTINGS: GitHubReadmeSettings = {
   defaultViewMode: "editor",
   showLineNumbers: true,
   inlineSuggestions: true,
+  selectionToolbar: true,
 };

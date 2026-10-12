@@ -177,6 +177,21 @@ class GitHubReadmeSettingTab extends PluginSettingTab {
         },
       },
       {
+        name: "Selection formatting menu",
+        desc: "Show Bold, Italic, and Strikethrough actions when text is selected in the editor.",
+        render: (setting: Setting) => {
+          setting.addToggle((toggle) => {
+            toggle
+              .setValue(this.pluginInstance.settings.selectionToolbar)
+              .onChange(async (value) => {
+                this.pluginInstance.settings.selectionToolbar = value;
+                await this.pluginInstance.saveSettings();
+                this.pluginInstance.refreshViews();
+              });
+          });
+        },
+      },
+      {
         name: "",
         desc: "",
         render: (_setting: Setting) => {
