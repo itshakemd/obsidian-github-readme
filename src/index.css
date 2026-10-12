@@ -183,7 +183,6 @@
   }
 }
 
-/* GitHub README plugin - internal sidebar layout */
 .github-readme-layout {
   display: flex;
   height: 100%;
@@ -225,7 +224,6 @@
   z-index: 1;
 }
 
-/* ── commit message + push button ── */
 .github-tab-header .github-commit-group {
   display: flex;
   align-items: center;
@@ -283,7 +281,6 @@
   cursor: default;
 }
 
-/* ── mode toggle (Editor / Viewer / Split) ── */
 .github-tab-header .github-readme-mode-toggle {
   display: flex;
   align-items: center;
@@ -337,7 +334,6 @@
   cursor: default;
 }
 
-/* ── open-in-tab button ── */
 .github-tab-header .github-readme-open-btn {
   display: flex;
   align-items: center;
@@ -416,7 +412,6 @@
   overflow: hidden;
 }
 
-/* the tab header already draws the top line, and the tab edge closes the bottom */
 .github-readme-root.fill .github-readme-editor-wrap,
 .github-readme-root.fill .github-readme-viewer {
   border-top: 0;
@@ -705,7 +700,6 @@
   font-weight: 600;
 }
 
-/* Sidebar repos view (right sidebar) */
 .github-repos-sidebar {
   display: flex;
   flex-direction: column;
@@ -793,7 +787,6 @@
   background: var(--background-modifier-hover);
 }
 
-/* accent bar marks the open repo */
 .github-repos-item.active::before {
   content: "";
   position: absolute;
@@ -865,7 +858,6 @@
   color: var(--text-muted);
 }
 
-/* Loading spinner */
 .github-spinner {
   display: inline-block;
   width: 18px;
@@ -957,7 +949,6 @@
   display: flex;
 }
 
-/* CodeMirror editor container */
 .github-readme-cm-editor {
   width: 100%;
   height: 100%;
@@ -967,7 +958,6 @@
   flex-direction: column;
 }
 
-/* Make the CM editor itself fill the container */
 .github-readme-cm-editor .cm-editor {
   width: 100%;
   height: 100%;
@@ -1000,7 +990,6 @@
   color: var(--text-normal);
 }
 
-/* Rendered markdown (Viewer / Split): typography comes from Obsidian's .markdown-rendered */
 .github-readme-markdown > :first-child { margin-top: 0; }
 .github-readme-markdown img { max-width: 100%; height: auto; }
 
@@ -1131,7 +1120,6 @@
   font-size: 14px;
   line-height: 1;
 }
-/* Token input width (replaces inline style to satisfy no-static-styles-assignment) */
 .github-readme-token-input {
   width: 260px;
 }

@@ -183,7 +183,6 @@
   }
 }
 
-/* GitHub README plugin - internal sidebar layout */
 .github-readme-layout {
   display: flex;
   height: 100%;
@@ -226,7 +225,6 @@
   z-index: 1;
 }
 
-/* â”€â”€ commit message + push button â”€â”€ */
 .github-tab-header .github-commit-group {
   display: flex;
   align-items: center;
@@ -284,7 +282,6 @@
   cursor: default;
 }
 
-/* â”€â”€ mode toggle (Editor / Viewer / Split) â”€â”€ */
 .github-tab-header .github-readme-mode-toggle {
   display: flex;
   align-items: center;
@@ -338,7 +335,6 @@
   cursor: default;
 }
 
-/* â”€â”€ open-in-tab button â”€â”€ */
 .github-tab-header .github-readme-open-btn {
   display: flex;
   align-items: center;
@@ -417,7 +413,6 @@
   overflow: hidden;
 }
 
-/* the tab header already draws the top line, and the tab edge closes the bottom */
 .github-readme-root.fill .github-readme-editor-wrap,
 .github-readme-root.fill .github-readme-viewer {
   border-top: 0;
@@ -457,8 +452,6 @@
   background: var(--background-secondary);
 }
 
-/* Onboarding card shown before a token is connected: centered on the page
-   and roughly square, rather than a left-aligned strip. */
 .github-readme-connect-card {
   margin: auto;
   width: 100%;
@@ -750,7 +743,6 @@
   font-weight: 600;
 }
 
-/* Sidebar repos view (right sidebar) */
 .github-repos-sidebar {
   display: flex;
   flex-direction: column;
@@ -790,7 +782,6 @@
   padding: 0 2px;
 }
 
-/* search field, count and visibility dropdown drawn as one control */
 .github-repos-filter-group {
   display: flex;
   align-items: stretch;
@@ -925,7 +916,6 @@
   color: var(--text-normal);
 }
 
-/* public / private selected */
 .github-repos-filter .github-repos-visibility.active {
   background: var(--interactive-accent);
   border-left-color: var(--interactive-accent);
@@ -973,7 +963,6 @@
   background: var(--background-modifier-hover);
 }
 
-/* accent bar marks the open repo */
 .github-repos-item.active::before {
   content: "";
   position: absolute;
@@ -1045,7 +1034,6 @@
   color: var(--text-muted);
 }
 
-/* Loading spinner */
 .github-spinner {
   display: inline-block;
   width: 18px;
@@ -1123,7 +1111,6 @@
 }
 
 .github-readme-content.mode-split > .github-readme-editor-wrap {
-  /* border handled by resizer */
 }
 
 .github-readme-editor-wrap {
@@ -1137,7 +1124,6 @@
   display: flex;
 }
 
-/* CodeMirror editor container */
 .github-readme-cm-editor {
   width: 100%;
   height: 100%;
@@ -1147,7 +1133,6 @@
   flex-direction: column;
 }
 
-/* Make the CM editor itself fill the container */
 .github-readme-cm-editor .cm-editor {
   width: 100%;
   height: 100%;
@@ -1158,6 +1143,13 @@
 
 .github-readme-cm-editor .cm-scroller {
   overflow: auto;
+}
+
+.github-readme-cm-editor .cm-inline-suggestion {
+  color: var(--text-faint);
+  opacity: 0.72;
+  pointer-events: none;
+  white-space: pre;
 }
 
 .github-readme-viewer {
@@ -1180,7 +1172,6 @@
   color: var(--text-normal);
 }
 
-/* Rendered markdown (Viewer / Split): typography comes from Obsidian's .markdown-rendered */
 .github-readme-markdown > :first-child { margin-top: 0; }
 .github-readme-markdown img { max-width: 100%; height: auto; }
 
@@ -1311,7 +1302,6 @@
   font-size: 14px;
   line-height: 1;
 }
-/* Token input width (replaces inline style to satisfy no-static-styles-assignment) */
 .github-readme-token-input {
   width: 260px;
 }

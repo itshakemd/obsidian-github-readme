@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { copyFileSync, existsSync, readdirSync, renameSync, unlinkSync } from "node:fs";
+import { copyFileSync, existsSync, readFileSync, readdirSync, renameSync, unlinkSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 function copyManifest() {
@@ -9,7 +9,6 @@ function copyManifest() {
     closeBundle() {
       copyFileSync(resolve("manifest.json"), resolve("dist/manifest.json"));
       copyFileSync(resolve("src/assets/logo.png"), resolve("dist/icon.png"));
-      // Obsidian loads styles.css if present — rename vite's css output
       try {
         const dist = resolve("dist");
         for (const f of readdirSync(dist)) {
@@ -22,7 +21,10 @@ function copyManifest() {
           }
         }
       } catch {
-        // ignore
+      }
+      const stylesPath = resolve("dist/styles.css");
+      if (existsSync(stylesPath)) {
+        writeFileSync(stylesPath, readFileSync(stylesPath, "utf8").replace(/\/\*[\s\S]*?\*\//g, ""));
       }
     },
   };
@@ -46,8 +48,6 @@ export default defineConfig({
       external: [
         "obsidian",
         "electron",
-        // Only these two are guaranteed to be available at runtime in Obsidian's require() shim.
-        // All other @codemirror/* packages must be bundled.
         "@codemirror/state",
         "@codemirror/view",
         "@lezer/common",
