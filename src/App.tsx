@@ -20,6 +20,7 @@ interface AppProps {
   defaultViewMode: ViewMode;
   showLineNumbers: boolean;
   inlineSuggestions: boolean;
+  showSelectionToolbar: boolean;
   renderMarkdown: (markdown: string, el: HTMLElement) => Promise<() => void>;
 }
 
@@ -35,6 +36,7 @@ export default function App({
   defaultViewMode,
   showLineNumbers,
   inlineSuggestions,
+  showSelectionToolbar,
   renderMarkdown,
 }: AppProps) {
   const hasToken = getToken().length > 0;
@@ -106,6 +108,7 @@ export default function App({
             viewerRef={viewerRef}
             showLineNumbers={showLineNumbers}
             inlineSuggestions={inlineSuggestions}
+            showSelectionToolbar={showSelectionToolbar}
             renderMarkdown={renderMarkdown}
             readmeSaved={readmeSaved}
           />

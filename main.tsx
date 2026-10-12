@@ -59,6 +59,7 @@ class GitHubView extends ItemView {
         defaultViewMode={this.plugin.settings.defaultViewMode}
         showLineNumbers={this.plugin.settings.showLineNumbers}
         inlineSuggestions={this.plugin.settings.inlineSuggestions}
+        showSelectionToolbar={this.plugin.settings.selectionToolbar}
         renderMarkdown={this.renderMarkdown}
       />
     );

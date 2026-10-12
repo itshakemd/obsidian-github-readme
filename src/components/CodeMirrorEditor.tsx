@@ -34,15 +34,17 @@ interface Props {
   scrollerRef?: React.RefObject<HTMLElement | null>;
   showLineNumbers?: boolean;
   inlineSuggestions?: boolean;
+  showSelectionToolbar?: boolean;
   className?: string;
 }
 
-export default function CodeMirrorEditor({ value, onChange, onScroll, scrollerRef, showLineNumbers = true, inlineSuggestions = true, className }: Props) {
+export default function CodeMirrorEditor({ value, onChange, onScroll, scrollerRef, showLineNumbers = true, inlineSuggestions = true, showSelectionToolbar = true, className }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
   const onChangeRef = useRef(onChange);
   const onScrollRef = useRef(onScroll);
   const lineNumbersCompartment = useRef(new Compartment());
+  const selectionToolbarCompartment = useRef(new Compartment());
   const inlineSuggestionsRef = useRef(inlineSuggestions);
 
   useEffect(() => {
@@ -68,7 +70,7 @@ export default function CodeMirrorEditor({ value, onChange, onScroll, scrollerRe
           markdown(),
           syntaxHighlighting(obsidianHighlightStyle),
           inlineSuggestionExtension,
-          selectionToolbar,
+          selectionToolbarCompartment.current.of(showSelectionToolbar ? selectionToolbar : []),
           keymap.of([...defaultKeymap, ...historyKeymap, indentWithTab]),
           lineNumbersCompartment.current.of(showLineNumbers ? [lineNumbers(), highlightActiveLineGutter()] : []),
           highlightActiveLine(),
@@ -161,6 +163,12 @@ export default function CodeMirrorEditor({ value, onChange, onScroll, scrollerRe
   useEffect(() => {
     if (!inlineSuggestions && viewRef.current) showInlineSuggestion(viewRef.current, null);
   }, [inlineSuggestions]);
+
+  useEffect(() => {
+    viewRef.current?.dispatch({
+      effects: selectionToolbarCompartment.current.reconfigure(showSelectionToolbar ? selectionToolbar : []),
+    });
+  }, [showSelectionToolbar]);
 
   return <div ref={containerRef} className={`github-readme-cm-editor${className ? ` ${className}` : ""}`} />;
 }
