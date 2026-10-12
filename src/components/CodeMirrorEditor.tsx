@@ -10,6 +10,7 @@ import {
   inlineSuggestionExtension,
   showInlineSuggestion,
 } from "../editor/inlineSuggestions";
+import { selectionToolbar } from "../editor/selectionToolbar";
 
 const obsidianHighlightStyle = HighlightStyle.define([
   { tag: tags.heading, color: "var(--text-accent, #7c3aed)", fontWeight: "700" },
@@ -67,6 +68,7 @@ export default function CodeMirrorEditor({ value, onChange, onScroll, scrollerRe
           markdown(),
           syntaxHighlighting(obsidianHighlightStyle),
           inlineSuggestionExtension,
+          selectionToolbar,
           keymap.of([...defaultKeymap, ...historyKeymap, indentWithTab]),
           lineNumbersCompartment.current.of(showLineNumbers ? [lineNumbers(), highlightActiveLineGutter()] : []),
           highlightActiveLine(),
