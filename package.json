@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@lezer/highlight": "^1.2.1",
+    "an-array-of-english-words": "^2.0.0",
     "obsidian": "^1.13.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
