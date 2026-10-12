@@ -1,10 +1,15 @@
 import { useEffect, useRef } from "react";
 import { EditorView, keymap, lineNumbers, highlightActiveLine, highlightActiveLineGutter } from "@codemirror/view";
-import { EditorState, Compartment } from "@codemirror/state";
+import { EditorState, Compartment, StateEffect } from "@codemirror/state";
 import { defaultKeymap, history, historyKeymap, indentWithTab } from "@codemirror/commands";
 import { markdown } from "@codemirror/lang-markdown";
 import { HighlightStyle, syntaxHighlighting } from "@codemirror/language";
 import { tags } from "@lezer/highlight";
+import {
+  createLocalInlineSuggestion,
+  inlineSuggestionExtension,
+  showInlineSuggestion,
+} from "../editor/inlineSuggestions";
 
 const obsidianHighlightStyle = HighlightStyle.define([
   { tag: tags.heading, color: "var(--text-accent, #7c3aed)", fontWeight: "700" },
@@ -27,20 +32,29 @@ interface Props {
   onScroll?: (ratio: number) => void;
   scrollerRef?: React.RefObject<HTMLElement | null>;
   showLineNumbers?: boolean;
+  inlineSuggestions?: boolean;
   className?: string;
 }
 
-export default function CodeMirrorEditor({ value, onChange, onScroll, scrollerRef, showLineNumbers = true, className }: Props) {
+export default function CodeMirrorEditor({ value, onChange, onScroll, scrollerRef, showLineNumbers = true, inlineSuggestions = true, className }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
   const onChangeRef = useRef(onChange);
-  // eslint-disable-next-line react-hooks/refs -- keep callback ref up to date without triggering re-render
-  onChangeRef.current = onChange;
   const onScrollRef = useRef(onScroll);
-  // eslint-disable-next-line react-hooks/refs -- keep callback ref up to date without triggering re-render
-  onScrollRef.current = onScroll;
-
   const lineNumbersCompartment = useRef(new Compartment());
+  const inlineSuggestionsRef = useRef(inlineSuggestions);
+
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+
+  useEffect(() => {
+    onScrollRef.current = onScroll;
+  }, [onScroll]);
+
+  useEffect(() => {
+    inlineSuggestionsRef.current = inlineSuggestions;
+  }, [inlineSuggestions]);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -52,6 +66,7 @@ export default function CodeMirrorEditor({ value, onChange, onScroll, scrollerRe
           history(),
           markdown(),
           syntaxHighlighting(obsidianHighlightStyle),
+          inlineSuggestionExtension,
           keymap.of([...defaultKeymap, ...historyKeymap, indentWithTab]),
           lineNumbersCompartment.current.of(showLineNumbers ? [lineNumbers(), highlightActiveLineGutter()] : []),
           highlightActiveLine(),
@@ -109,14 +124,28 @@ export default function CodeMirrorEditor({ value, onChange, onScroll, scrollerRe
 
     viewRef.current = view;
 
+    let suggestionTimer: number | null = null;
+    const scheduleSuggestion = EditorView.updateListener.of((update) => {
+      if (!update.docChanged && !update.selectionSet && !update.focusChanged) return;
+      if (suggestionTimer !== null) window.clearTimeout(suggestionTimer);
+      showInlineSuggestion(update.view, null);
+      if (!inlineSuggestionsRef.current || !update.view.hasFocus) return;
+      suggestionTimer = window.setTimeout(() => {
+        suggestionTimer = null;
+        if (!inlineSuggestionsRef.current || !update.view.hasFocus) return;
+        showInlineSuggestion(update.view, createLocalInlineSuggestion(update.view.state));
+      }, 180);
+    });
+    view.dispatch({ effects: StateEffect.appendConfig.of(scheduleSuggestion) });
+
     if (scrollerRef) scrollerRef.current = view.scrollDOM;
 
     return () => {
+      if (suggestionTimer !== null) window.clearTimeout(suggestionTimer);
       view.destroy();
       viewRef.current = null;
       if (scrollerRef) scrollerRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- view initialization should only run on mount (remount is handled by editorKey)
   }, []);
 
   useEffect(() => {
@@ -126,6 +155,10 @@ export default function CodeMirrorEditor({ value, onChange, onScroll, scrollerRe
       });
     }
   }, [showLineNumbers]);
+
+  useEffect(() => {
+    if (!inlineSuggestions && viewRef.current) showInlineSuggestion(viewRef.current, null);
+  }, [inlineSuggestions]);
 
   return <div ref={containerRef} className={`github-readme-cm-editor${className ? ` ${className}` : ""}`} />;
 }
