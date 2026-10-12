@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./App.css";
 import ReposSidebar from "./components/ReposSidebar";
 import TabHeader from "./components/TabHeader";
@@ -19,6 +19,7 @@ interface AppProps {
   openSettings: () => void;
   defaultViewMode: ViewMode;
   showLineNumbers: boolean;
+  inlineSuggestions: boolean;
   renderMarkdown: (markdown: string, el: HTMLElement) => Promise<() => void>;
 }
 
@@ -33,15 +34,11 @@ export default function App({
   watchFile,
   defaultViewMode,
   showLineNumbers,
+  inlineSuggestions,
   renderMarkdown,
 }: AppProps) {
-  const [hasToken, setHasToken] = useState(() => getToken().length > 0);
+  const hasToken = getToken().length > 0;
   const [sidebarOpen, setSidebarOpen] = useState(true);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- sync hasToken with external plugin settings on mount / token getter change
-    setHasToken(getToken().length > 0);
-  }, [getToken]);
 
   const {
     editorKey,
@@ -108,6 +105,7 @@ export default function App({
             editorKey={editorKey}
             viewerRef={viewerRef}
             showLineNumbers={showLineNumbers}
+            inlineSuggestions={inlineSuggestions}
             renderMarkdown={renderMarkdown}
             readmeSaved={readmeSaved}
           />

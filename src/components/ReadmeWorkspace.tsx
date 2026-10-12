@@ -14,6 +14,7 @@ interface Props {
   editorKey: number;
   viewerRef: React.RefObject<HTMLDivElement | null>;
   showLineNumbers: boolean;
+  inlineSuggestions: boolean;
   renderMarkdown: (markdown: string, el: HTMLElement) => Promise<() => void>;
   readmeSaved: boolean;
 }
@@ -29,6 +30,7 @@ export default function ReadmeWorkspace({
   editorKey,
   viewerRef,
   showLineNumbers,
+  inlineSuggestions,
   renderMarkdown,
   readmeSaved,
 }: Props) {
@@ -79,6 +81,7 @@ export default function ReadmeWorkspace({
                   value={readmeDraft}
                   onChange={setReadmeDraft}
                   showLineNumbers={showLineNumbers}
+                  inlineSuggestions={inlineSuggestions}
                 />
               </div>
             )}

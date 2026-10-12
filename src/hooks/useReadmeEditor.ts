@@ -23,7 +23,6 @@ export function useReadmeEditor(
   const [viewMode, setViewMode] = useState<ViewMode>(defaultViewMode);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- sync viewMode with plugin default setting
     setViewMode(defaultViewMode);
   }, [defaultViewMode]);
 
