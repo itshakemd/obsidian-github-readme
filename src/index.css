@@ -398,6 +398,40 @@
     border-right: none;
     border-bottom: 1px solid var(--background-modifier-border);
   }
+
+  /* ── Mobile: larger tap targets for header icon buttons ── */
+  .github-tab-header {
+    padding: 6px 10px;
+    gap: 6px;
+  }
+
+  /* Sidebar toggle + "Open in Obsidian tab" buttons */
+  .github-tab-header .github-readme-open-btn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    flex-shrink: 0;
+  }
+
+  .github-tab-header .github-readme-open-btn svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  /* View-mode toggle (Editor / Viewer / Split) */
+  .github-tab-header .github-readme-mode-toggle {
+    height: 40px;
+  }
+
+  .github-tab-header .github-readme-mode-btn {
+    padding: 0 10px;
+    min-height: 36px;
+  }
+
+  .github-tab-header .github-readme-mode-btn svg {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 .github-readme-root {

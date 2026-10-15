@@ -20,24 +20,58 @@ It is built for developers, technical writers, and creators who want documentati
 
 ## Key features
 
-- GitHub repo discovery from your authenticated account
-- README access and editing directly inside Obsidian
-- Editor, preview, and split-view modes for Markdown workflow
-- Live rendered Markdown preview for quick review
-- One-click save back to GitHub with custom commit message
-- Local vault sync so the README can be opened and updated inside your notes
-- Clean, focused UI designed for a documentation-first experience
+- **GitHub repo discovery**: Browse public and private repositories from your authenticated GitHub account with search and visibility filters
+- **Direct README editing**: Open and edit any repository README in a distraction-free workspace
+- **Selection formatting menu**: Floating context toolbar that appears when selecting text with instant Bold, Italic, and Strikethrough actions
+- **Smart inline suggestions**: Real-time ghost text word completions prioritizing vocabulary from your README (press `Tab` to accept, `Esc` to dismiss)
+- **Editor, preview & split modes**: Switch seamlessly between editor-only, rendered preview, or side-by-side split view
+- **Draggable split resizer**: Customize the split ratio between editor and preview by dragging the divider
+- **Collapsible repo sidebar**: Smooth animated slide-and-fade toggle to maximize your editing workspace
+- **One-click GitHub push**: Commit and push changes directly back to GitHub with custom commit messages
+- **Live Obsidian vault sync**: Save and live-sync a local copy into your vault with automatic two-way file tracking
+- **Customizable settings**: Toggle line numbers, inline suggestions, selection toolbar, and default view mode
+
+## Smart editing features
+
+### Selection formatting menu (context menu)
+When you select text inside the README editor, a floating formatting menu automatically appears near your selection. You can instantly apply or toggle:
+- **Bold** (`**text**`)
+- *Italic* (`*text*`)
+- ~~Strikethrough~~ (`~~text~~`)
+
+If selected text is already formatted, clicking the button cleans up and removes the markers. This can be toggled on or off in the plugin settings.
+
+### Inline ghost text suggestions
+Speed up your writing with intelligent word completions that appear as faint ghost text ahead of your cursor. Suggestions prioritize words already used throughout your document, backed by an English dictionary.
+- Press **Tab** to accept the suggestion
+- Press **Escape** to dismiss it
+- Can be enabled or disabled in plugin settings
+
+### Collapsible sidebar & resizable workspace
+- Click the sidebar toggle button in the header to smoothly slide and collapse the repository bar for an uninterrupted, full-width writing space.
+- In split mode, drag the vertical resizer bar to allocate more room to either the Markdown editor or the rendered preview.
 
 ## The workflow
 
-1. Connect your GitHub token in plugin settings.
-2. Pick a repository from the sidebar.
-3. Open the repository README.
-4. Edit in the Markdown editor or preview the final output.
-5. Save the content back to GitHub.
-6. Keep a synced copy in your vault for local context and reference.
+1. Connect your GitHub Personal Access Token in plugin settings.
+2. Pick a repository from the sidebar (filter by name, language, or public/private visibility).
+3. Open the repository README into the editor.
+4. Write and refine with inline suggestions and the selection formatting menu.
+5. Review the rendered output in live preview or split view.
+6. Push your commit directly back to GitHub with a custom commit message.
+7. Optionally open and live-sync a local copy inside your Obsidian vault.
 
 This turns README editing into a smooth part of your note-taking and documentation process rather than a separate task.
+
+## Configuration & settings
+
+Fine-tune the editing experience in Obsidian **Settings → GitHub README**:
+
+- **GitHub Personal Access Token**: Securely store your token locally in `data.json` with classic or fine-grained repo permissions.
+- **Default view mode**: Choose how READMEs open by default (`Editor`, `Viewer`, or `Split`).
+- **Show line numbers**: Toggle line numbers in the editor gutter.
+- **Inline suggestions**: Toggle intelligent word ghost completions.
+- **Selection formatting menu**: Toggle the floating formatting context menu on text selection.
 
 ## Built for
 
