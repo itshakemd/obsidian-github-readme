@@ -384,6 +384,47 @@
   cursor: default;
 }
 
+@media (max-width: 768px), (orientation: portrait) {
+  .github-readme-layout {
+    flex-direction: row;
+  }
+
+  .github-readme-layout .github-readme-main {
+    width: 100%;
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .github-readme-sidebar:not(.modal-mode) {
+    display: none !important;
+  }
+}
+
+.github-readme-sidebar.modal-mode {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 100% !important;
+  flex: none !important;
+  height: 80% !important;
+  max-height: 85vh !important;
+  border-right: none !important;
+  border-left: none !important;
+  border-bottom: none !important;
+  border-top: 1px solid var(--background-modifier-border);
+  border-radius: 16px 16px 0 0;
+  background: var(--background-secondary);
+  box-shadow: 0 -12px 36px rgba(0, 0, 0, 0.45);
+  z-index: 1000;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden;
+}
+
+
 /* ── Bottom-to-Top Repos Modal Sheet (Small / Portrait Screen) ── */
 .github-readme-modal-backdrop {
   position: absolute;
