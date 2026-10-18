@@ -107,15 +107,31 @@ export default function App({
           aria-hidden="true"
         />
       )}
-      <aside className={`github-readme-sidebar ${sidebarOpen ? "" : "collapsed"}`}>
+      <aside
+        className={`github-readme-sidebar ${
+          isSmallOrPortrait
+            ? `modal-mode ${reposModalOpen ? "modal-open" : "modal-closed"}`
+            : sidebarOpen
+            ? ""
+            : "collapsed"
+        }`}
+        aria-hidden={isSmallOrPortrait ? !reposModalOpen : !sidebarOpen}
+      >
         <ReposSidebar
           getToken={getToken}
           listRepos={listRepos}
           fetchProfile={fetchProfile}
-          onOpenSettings={openSettings}
-          onSelectRepo={(repo) => { void handleSelectRepo(repo); }}
+          onOpenSettings={() => {
+            if (isSmallOrPortrait) setReposModalOpen(false);
+            openSettings();
+          }}
+          onSelectRepo={(repo) => {
+            if (isSmallOrPortrait) setReposModalOpen(false);
+            void handleSelectRepo(repo);
+          }}
           selectedFullName={selectedRepo?.full_name ?? null}
           openingFullName={readmeLoading ? selectedRepo?.full_name ?? null : null}
+          onClose={isSmallOrPortrait ? () => setReposModalOpen(false) : undefined}
         />
       </aside>
 
