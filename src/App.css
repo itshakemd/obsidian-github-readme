@@ -373,6 +373,25 @@
   cursor: default;
 }
 
+/* ── Bottom-to-Top Repos Modal Sheet (Small / Portrait Screen) ── */
+.github-readme-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  z-index: 900;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+
+.github-readme-modal-backdrop.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
 /* Header actions in modal (refresh + close) */
 .github-repos-header-actions {
   display: flex;
