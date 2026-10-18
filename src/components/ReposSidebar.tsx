@@ -38,6 +38,7 @@ interface Props {
   onSelectRepo: (repo: RepoInfo) => void;
   selectedFullName?: string | null;
   openingFullName?: string | null;
+  onClose?: () => void;
 }
 
 export default function ReposSidebar({
@@ -48,6 +49,7 @@ export default function ReposSidebar({
   onSelectRepo,
   selectedFullName,
   openingFullName,
+  onClose,
 }: Props) {
   const {
     hasToken,
@@ -87,8 +89,29 @@ export default function ReposSidebar({
   if (!hasToken) {
     return (
       <div className="github-repos-sidebar empty">
+        {onClose && (
+          <div className="github-modal-handle-bar">
+            <div className="github-modal-handle" />
+          </div>
+        )}
         <div className="github-repos-sidebar-header">
           <h4>GitHub Repos</h4>
+          {onClose && (
+            <div className="github-repos-header-actions">
+              <button
+                onClick={onClose}
+                type="button"
+                className="github-repos-modal-close"
+                title="Close repositories modal"
+                aria-label="Close repositories modal"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M18 6 6 18" />
+                  <path d="m6 6 12 12" />
+                </svg>
+              </button>
+            </div>
+          )}
         </div>
         <div className="github-repos-waiting">Waiting for you to connect…</div>
       </div>
@@ -97,11 +120,32 @@ export default function ReposSidebar({
 
   return (
     <div className="github-repos-sidebar">
+      {onClose && (
+        <div className="github-modal-handle-bar">
+          <div className="github-modal-handle" />
+        </div>
+      )}
       <div className="github-repos-sidebar-header">
         <h4>GitHub Repos</h4>
-        <button onClick={() => void fetchRepos()} disabled={loading} type="button" className="github-repos-refresh" title="Refresh repos">
-          {loading ? "…" : "↻"}
-        </button>
+        <div className="github-repos-header-actions">
+          <button onClick={() => void fetchRepos()} disabled={loading} type="button" className="github-repos-refresh" title="Refresh repos">
+            {loading ? "…" : "↻"}
+          </button>
+          {onClose && (
+            <button
+              onClick={onClose}
+              type="button"
+              className="github-repos-modal-close"
+              title="Close repositories modal"
+              aria-label="Close repositories modal"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="github-repos-filter">
