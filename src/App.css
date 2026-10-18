@@ -559,11 +559,45 @@
 }
 
 .github-readme-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
   margin: auto;
-  padding: 32px 0;
+  padding: 32px 16px;
   text-align: center;
-  font-size: 14px;
+}
+
+.github-readme-empty-title {
+  font-size: 15px;
+  font-weight: 500;
   color: var(--text-muted);
+}
+
+.github-readme-empty-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  background: var(--interactive-accent);
+  color: var(--text-on-accent, #ffffff);
+  border: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.github-readme-empty-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.github-readme-empty-btn svg {
+  width: 16px;
+  height: 16px;
 }
 
 .github-repos-waiting {
