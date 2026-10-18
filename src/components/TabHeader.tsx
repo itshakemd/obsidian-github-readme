@@ -54,6 +54,8 @@ interface Props {
   repoFullName: string | null;
   sidebarOpen?: boolean;
   onToggleSidebar?: () => void;
+  isSmallOrPortrait?: boolean;
+  reposModalOpen?: boolean;
 }
 
 export default function TabHeader({
@@ -71,32 +73,60 @@ export default function TabHeader({
   repoFullName,
   sidebarOpen,
   onToggleSidebar,
+  isSmallOrPortrait,
+  reposModalOpen,
 }: Props) {
   return (
     <div className="github-tab-header">
       {onToggleSidebar && (
         <button
           type="button"
-          className="github-readme-open-btn"
-          aria-label={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
-          title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+          className={`github-readme-open-btn ${isSmallOrPortrait && reposModalOpen ? "active" : ""}`}
+          aria-label={
+            isSmallOrPortrait
+              ? reposModalOpen
+                ? "Close repositories"
+                : "Open repositories"
+              : sidebarOpen
+              ? "Collapse sidebar"
+              : "Expand sidebar"
+          }
+          title={
+            isSmallOrPortrait
+              ? reposModalOpen
+                ? "Close repositories"
+                : "Open repositories"
+              : sidebarOpen
+              ? "Collapse sidebar"
+              : "Expand sidebar"
+          }
           onClick={onToggleSidebar}
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            {sidebarOpen ? (
-              <>
-                <rect width="18" height="18" x="3" y="3" rx="2" />
-                <path d="M9 3v18" />
-                <path d="m16 15-3-3 3-3" />
-              </>
+          {isSmallOrPortrait ? (
+            reposModalOpen ? (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="m6 9 6 6 6-6" />
+              </svg>
             ) : (
-              <>
-                <rect width="18" height="18" x="3" y="3" rx="2" />
-                <path d="M9 3v18" />
-                <path d="m14 9 3 3-3 3" />
-              </>
-            )}
-          </svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z" />
+                <path d="M6 6h10" />
+                <path d="M6 10h10" />
+              </svg>
+            )
+          ) : sidebarOpen ? (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect width="18" height="18" x="3" y="3" rx="2" />
+              <path d="M9 3v18" />
+              <path d="m16 15-3-3 3-3" />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect width="18" height="18" x="3" y="3" rx="2" />
+              <path d="M9 3v18" />
+              <path d="m14 9 3 3-3 3" />
+            </svg>
+          )}
         </button>
       )}
       <div className="github-commit-group">
