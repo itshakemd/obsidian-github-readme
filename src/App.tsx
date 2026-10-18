@@ -94,6 +94,9 @@ export default function App({
     handleOpenInObsidian,
   } = useReadmeEditor(defaultViewMode, fetchReadme, saveReadme, openReadme, watchFile);
 
+  const hasReadme = !!readme;
+  const hasDraftChanges = hasReadme && readmeDraft !== readme.content;
+
   return (
     <div
       ref={layoutRef}
@@ -107,6 +110,7 @@ export default function App({
           aria-hidden="true"
         />
       )}
+
       <aside
         className={`github-readme-sidebar ${
           isSmallOrPortrait
@@ -150,7 +154,9 @@ export default function App({
           handleOpenInObsidian={handleOpenInObsidian}
           repoFullName={selectedRepo?.full_name ?? null}
           sidebarOpen={sidebarOpen}
-          onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+          onToggleSidebar={handleToggleRepos}
+          isSmallOrPortrait={isSmallOrPortrait}
+          reposModalOpen={reposModalOpen}
         />
 
         <div className={`github-readme-root ${selectedRepo ? "fill" : ""}`}>
@@ -194,6 +200,58 @@ export default function App({
           )}
         </div>
       </div>
+
+      {/* Floating Push Button for mobile / portrait */}
+      {isSmallOrPortrait && selectedRepo && hasReadme && (
+        <button
+          type="button"
+          className={`github-readme-fab ${hasDraftChanges ? "has-changes" : ""} ${readmeSaved ? "saved" : ""}`}
+          onClick={() => {
+            setCommitMsg("Update README via Obsidian");
+            void handlePushCommit();
+          }}
+          disabled={!hasDraftChanges || readmeSaving}
+          aria-label={
+            readmeSaving
+              ? "Pushing commit…"
+              : readmeSaved
+              ? "Commit pushed"
+              : "Push commit to GitHub"
+          }
+          title={
+            readmeSaving
+              ? "Pushing commit…"
+              : readmeSaved
+              ? "Pushed successfully"
+              : hasDraftChanges
+              ? "Push commit (Update README via Obsidian)"
+              : "No draft changes"
+          }
+        >
+          {readmeSaving ? (
+            <>
+              <span className="github-spinner small" role="status" aria-label="Pushing" />
+              <span>Pushing…</span>
+            </>
+          ) : readmeSaved ? (
+            <>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              <span>Pushed!</span>
+            </>
+          ) : (
+            <>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+                <polyline points="16 6 12 2 8 6" />
+                <line x1="12" y1="2" x2="12" y2="15" />
+              </svg>
+              <span>Push</span>
+            </>
+          )}
+        </button>
+      )}
     </div>
   );
 }
