@@ -129,25 +129,28 @@ export default function TabHeader({
           )}
         </button>
       )}
-      <div className="github-commit-group">
-        <input
-          className="github-commit-input"
-          type="text"
-          placeholder="Commit message â€” e.g., Update README"
-          value={commitMsg}
-          onChange={(e) => setCommitMsg(e.target.value)}
-          aria-label="Commit message"
-        />
-        <button
-          className="mod-cta github-push-btn"
-          onClick={() => void handlePushCommit()}
-          disabled={!selectedRepo || !hasReadme || !hasDraftChanges || readmeSaving || !commitMsg.trim()}
-          type="button"
-          title={repoFullName ? `Push to ${repoFullName}` : "Select a repo first"}
-        >
-          {readmeSaving ? "Pushingâ€¦" : "Push commit"}
-        </button>
-      </div>
+      {isSmallOrPortrait && <div className="github-tab-header-spacer" />}
+      {!isSmallOrPortrait && (
+        <div className="github-commit-group">
+          <input
+            className="github-commit-input"
+            type="text"
+            placeholder="Commit message — e.g., Update README"
+            value={commitMsg}
+            onChange={(e) => setCommitMsg(e.target.value)}
+            aria-label="Commit message"
+          />
+          <button
+            className="mod-cta github-push-btn"
+            onClick={() => void handlePushCommit()}
+            disabled={!selectedRepo || !hasReadme || !hasDraftChanges || readmeSaving || !commitMsg.trim()}
+            type="button"
+            title={repoFullName ? `Push to ${repoFullName}` : "Select a repo first"}
+          >
+            {readmeSaving ? "Pushing…" : "Push commit"}
+          </button>
+        </div>
+      )}
       <div className="github-readme-mode-toggle" role="group" aria-label="README view mode">
         {MODES.map(({ mode, label }) => (
           <button
