@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import ReposSidebar from "./components/ReposSidebar";
 import TabHeader from "./components/TabHeader";
 import ConnectCard from "./components/ConnectCard";
 import ReadmeWorkspace from "./components/ReadmeWorkspace";
 import { useReadmeEditor } from "./hooks/useReadmeEditor";
+import { useIsSmallOrPortrait } from "./hooks/useIsSmallOrPortrait";
 import type { ReadmeData, RepoInfo, UserProfile, ViewMode } from "./types";
 
 interface AppProps {
@@ -40,7 +41,37 @@ export default function App({
   renderMarkdown,
 }: AppProps) {
   const hasToken = getToken().length > 0;
+  const layoutRef = useRef<HTMLDivElement>(null);
+  const isSmallOrPortrait = useIsSmallOrPortrait(layoutRef);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [reposModalOpen, setReposModalOpen] = useState(false);
+
+  // Close repos modal on Escape key
+  useEffect(() => {
+    if (!isSmallOrPortrait || !reposModalOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setReposModalOpen(false);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isSmallOrPortrait, reposModalOpen]);
+
+  // Reset modal state when switching back to desktop landscape
+  useEffect(() => {
+    if (!isSmallOrPortrait) {
+      setReposModalOpen(false);
+    }
+  }, [isSmallOrPortrait]);
+
+  const handleToggleRepos = () => {
+    if (isSmallOrPortrait) {
+      setReposModalOpen((prev) => !prev);
+    } else {
+      setSidebarOpen((prev) => !prev);
+    }
+  };
 
   const {
     editorKey,
@@ -64,7 +95,18 @@ export default function App({
   } = useReadmeEditor(defaultViewMode, fetchReadme, saveReadme, openReadme, watchFile);
 
   return (
-    <div className="github-readme-layout">
+    <div
+      ref={layoutRef}
+      className={`github-readme-layout ${isSmallOrPortrait ? "is-small-or-portrait" : ""}`}
+    >
+      {/* Backdrop for small or portrait bottom modal */}
+      {isSmallOrPortrait && (
+        <div
+          className={`github-readme-modal-backdrop ${reposModalOpen ? "visible" : ""}`}
+          onClick={() => setReposModalOpen(false)}
+          aria-hidden="true"
+        />
+      )}
       <aside className={`github-readme-sidebar ${sidebarOpen ? "" : "collapsed"}`}>
         <ReposSidebar
           getToken={getToken}
