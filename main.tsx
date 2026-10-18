@@ -1,4 +1,5 @@
 import { Component, ItemView, MarkdownRenderer, MarkdownView, normalizePath, Notice, Plugin, PluginSettingTab, requestUrl, Setting, TFile, WorkspaceLeaf } from "obsidian";
+import type { SettingDefinitionItem } from "obsidian";
 import { createRoot } from "react-dom/client";
 import type { Root } from "react-dom/client";
 import App from "./src/App";
@@ -91,7 +92,7 @@ class GitHubReadmeSettingTab extends PluginSettingTab {
     this.pluginInstance = pluginInstance;
   }
 
-  getSettingDefinitions() {
+  getSettingDefinitions(): SettingDefinitionItem[] {
     return [
       {
         name: "GitHub Personal Access Token",
@@ -127,25 +128,8 @@ class GitHubReadmeSettingTab extends PluginSettingTab {
             });
         },
       },
-      {
-        name: "Clear token",
-        desc: "Remove the stored token.",
-        render: (setting: Setting) => {
-          setting.addButton((button) => {
-            button.setButtonText("Clear").setDestructive().onClick(async () => {
-              this.pluginInstance.settings.githubToken = "";
-              await this.pluginInstance.saveSettings();
-              this.pluginInstance.refreshViews();
-              this.update();
-              new Notice("Token cleared");
-            });
-          });
-        },
-      },
-      {
-        name: "Token permissions",
-        desc: "Create a token at github.com/settings/tokens (classic, scope: repo) or fine-grained with Contents: Read & write.",
-      },
+
+
       {
         name: "Default view mode",
         desc: "How READMEs open: editor only, rendered viewer only, or editor and viewer side by side.",
