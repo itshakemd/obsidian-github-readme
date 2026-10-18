@@ -467,6 +467,17 @@
 
 
 @media (max-width: 768px), (orientation: portrait) {
+
+  /* Split mode: stack editor + viewer vertically on small / portrait screens */
+  .github-readme-content.mode-split {
+    flex-direction: column !important;
+  }
+
+  .github-readme-content.mode-split > .github-readme-editor-wrap {
+    border-right: none !important;
+    border-bottom: 1px solid var(--background-modifier-border) !important;
+  }
+
   .github-readme-layout {
     flex-direction: row;
   }
