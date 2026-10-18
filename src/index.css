@@ -384,6 +384,35 @@
   cursor: default;
 }
 
+/* ── Floating Action Button (FAB) for Mobile / Portrait Push ── */
+.github-readme-fab {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--interactive-accent);
+  color: var(--text-on-accent, #ffffff);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35), 0 2px 6px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+  user-select: none;
+}
+
+.github-readme-fab svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+
 /* Header Spacer on mobile / portrait screen */
 .github-tab-header-spacer {
   flex: 1 1 auto;
