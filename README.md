@@ -88,19 +88,19 @@ GitHub README keeps repository browsing and documentation work together in one f
 
 Write and refine your README with the repository list visible beside the editor.
 
-![Markdown editor in Obsidian](https://community.obsidian.md/api/images/11956)
+![Markdown editor in Obsidian](https://community.obsidian.md/api/images/13399)
 
 ### Live preview
 
 Review the rendered README before publishing it back to GitHub.
 
-![README live preview in Obsidian](https://community.obsidian.md/api/images/11957)
+![README live preview in Obsidian](https://community.obsidian.md/api/images/13400)
 
 ### Split view
 
 Edit Markdown and compare the rendered result side by side.
 
-![README split view in Obsidian](https://community.obsidian.md/api/images/11958)
+![README split view in Obsidian](https://community.obsidian.md/api/images/13401)
 
 ## Why it stands out
 
